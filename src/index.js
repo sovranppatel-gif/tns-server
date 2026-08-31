@@ -1,7 +1,6 @@
 import http from "http";
 import express from "express";
 import cors from "cors";
-import path from "path";
 import mongoose from "mongoose";
 import { env } from "./config/env.js";
 import masterAdminAuthRoutes from "./routes/masterAdminAuth.routes.js";
@@ -38,7 +37,10 @@ import studentExamsRoutes from "./modules/exams/studentExams.routes.js";
 import { activityLogger } from "./middleware/activityLogger.js";
 import { requireDbReady } from "./middleware/requireDbReady.js";
 import { initSocket } from "./lib/socket.js";
-import { connectMongo } from "./db/connectMongo.js";
+import { connectMongoOnce } from "./db/connectMongo.js";
+import { isVercel } from "./lib/isVercel.js";
+import { normalizeVercelPath } from "./lib/normalizeVercelPath.js";
+import { getUploadRoot } from "./lib/uploadRoot.js";
 import { seedEnquiriesDemo } from "./db/seedEnquiriesDemo.js";
 import { seedLeadsDemo } from "./db/seedLeadsDemo.js";
 import { seedSiteSettingsDemo } from "./db/seedSiteSettingsDemo.js";
@@ -57,9 +59,9 @@ import { seedStaffDemo } from "./db/seedStaffDemo.js";
 import { seedStaffLookups } from "./db/seedStaffLookups.js";
 
 const app = express();
-const server = http.createServer(app);
 
-initSocket(server);
+app.set("trust proxy", true);
+app.use(normalizeVercelPath);
 
 app.use(
   cors({
@@ -70,16 +72,31 @@ app.use(
 app.use(express.json({ limit: "5mb" }));
 app.use(activityLogger);
 
-app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+app.use("/uploads", express.static(getUploadRoot()));
 
-app.get("/health", (_req, res) => {
+function apiStatus(_req, res) {
+  const mongoReady = mongoose.connection.readyState === 1;
+  res.status(200).json({
+    success: true,
+    message: "TNS API is running",
+    mongoReady,
+    health: "/health",
+  });
+}
+
+function healthStatus(_req, res) {
   const mongoReady = mongoose.connection.readyState === 1;
   res.status(mongoReady ? 200 : 503).json({
     ok: mongoReady,
     mongoReady,
     readyState: mongoose.connection.readyState,
   });
-});
+}
+
+app.get("/", apiStatus);
+app.get("/api", apiStatus);
+app.get("/health", healthStatus);
+app.get("/api/health", healthStatus);
 
 // Fail fast on API while Mongo is reconnecting (avoids long hung logins)
 app.use("/api", requireDbReady);
@@ -118,8 +135,13 @@ app.use("/api/question-bank", questionBankRoutes);
 app.use("/api/exams", examsRoutes);
 app.use("/api/student/exams", studentExamsRoutes);
 
-app.use((_req, res) => {
-  res.status(404).json({ success: false, message: "Not found" });
+app.use((req, res) => {
+  res.status(404).json({
+    success: false,
+    message: "Not found",
+    method: req.method,
+    path: req.originalUrl || req.url,
+  });
 });
 
 app.use((err, _req, res, _next) => {
@@ -147,7 +169,19 @@ async function runSeeds() {
   console.log("Demo seeds finished");
 }
 
-function listenOnce() {
+function afterMongoConnected() {
+  if (process.env.SEED_ON_START === "1") {
+    runSeeds().catch((err) => {
+      console.error("Background seed failed:", err?.message || err);
+    });
+  } else {
+    seedMasterAdminUser().catch((err) => {
+      console.error("Master-admin seed failed:", err?.message || err);
+    });
+  }
+}
+
+function listenOnce(server) {
   return new Promise((resolve, reject) => {
     const onError = (err) => {
       server.off("listening", onListening);
@@ -167,11 +201,11 @@ function listenOnce() {
   });
 }
 
-async function listen() {
+async function listen(server) {
   const retries = 15;
   for (let i = 1; i <= retries; i += 1) {
     try {
-      await listenOnce();
+      await listenOnce(server);
       return;
     } catch (err) {
       const busy = err?.code === "EADDRINUSE";
@@ -189,7 +223,7 @@ async function listen() {
   }
 }
 
-async function shutdown(signal) {
+async function shutdown(server, signal) {
   console.log(`Shutting down (${signal})...`);
   try {
     await new Promise((resolve) => {
@@ -205,45 +239,35 @@ async function shutdown(signal) {
   process.exit(0);
 }
 
-process.once("SIGINT", () => void shutdown("SIGINT"));
-process.once("SIGTERM", () => void shutdown("SIGTERM"));
+async function startLocal() {
+  const server = http.createServer(app);
+  initSocket(server);
 
-async function connectMongoWithRetry() {
-  for (;;) {
-    try {
-      await connectMongo();
-      return;
-    } catch (err) {
-      console.error(
-        "MongoDB connect failed, retrying in 3s:",
-        err?.message || err
-      );
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-    }
-  }
-}
+  process.once("SIGINT", () => void shutdown(server, "SIGINT"));
+  process.once("SIGTERM", () => void shutdown(server, "SIGTERM"));
 
-async function start() {
   console.log("Booting API...");
-
-  // Keep HTTP up even if Atlas DNS flaps — login should not get "connection refused"
-  await listen();
-  await connectMongoWithRetry();
-
-  // Heavy demo seeds already live in Atlas — skip on every watch restart.
-  // Run `npm run seed` or set SEED_ON_START=1 when you actually need them.
-  if (process.env.SEED_ON_START === "1") {
-    runSeeds().catch((err) => {
-      console.error("Background seed failed:", err?.message || err);
-    });
-  } else {
-    seedMasterAdminUser().catch((err) => {
-      console.error("Master-admin seed failed:", err?.message || err);
-    });
-  }
+  await listen(server);
+  await connectMongoOnce();
+  afterMongoConnected();
 }
 
-start().catch((err) => {
-  console.error("Failed to start server:", err);
-  process.exit(1);
-});
+async function startServerless() {
+  console.log("Booting API (Vercel)...");
+  connectMongoOnce()
+    .then(() => afterMongoConnected())
+    .catch((err) => {
+      console.error("MongoDB connect failed:", err?.message || err);
+    });
+}
+
+if (isVercel) {
+  startServerless();
+} else {
+  startLocal().catch((err) => {
+    console.error("Failed to start server:", err);
+    process.exit(1);
+  });
+}
+
+export default app;

@@ -28,7 +28,7 @@ const SECTION_MAP = [
   { prefix: "/api/student/exams", section: "student-exams" },
 ];
 
-const SKIP_PREFIXES = ["/api/activity-logs", "/health", "/uploads"];
+const SKIP_PREFIXES = ["/api/activity-logs", "/health", "/uploads", "/api/health"];
 
 function resolveSection(path) {
   const hit = SECTION_MAP.find((item) => path.startsWith(item.prefix));

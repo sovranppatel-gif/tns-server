@@ -105,3 +105,46 @@ export async function connectMongo() {
   const { host, name } = mongoose.connection;
   console.log(`MongoDB connected: db="${name}" host="${host}"`);
 }
+
+let bootPromise = null;
+
+mongoose.connection.on("disconnected", () => {
+  bootPromise = null;
+});
+
+/** Single shared connect loop — safe to call from index boot and request middleware. */
+export function connectMongoOnce() {
+  if (mongoose.connection.readyState === 1) return Promise.resolve();
+  if (bootPromise) return bootPromise;
+  bootPromise = (async () => {
+    for (;;) {
+      try {
+        await connectMongo();
+        return;
+      } catch (err) {
+        console.error(
+          "MongoDB connect failed, retrying in 3s:",
+          err?.message || err
+        );
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+      }
+    }
+  })().finally(() => {
+    if (mongoose.connection.readyState !== 1) bootPromise = null;
+  });
+  return bootPromise;
+}
+
+export async function waitForMongo(timeoutMs = 8000) {
+  if (mongoose.connection.readyState === 1) return;
+  const pending = connectMongoOnce();
+  await Promise.race([
+    pending,
+    new Promise((_, reject) => {
+      setTimeout(() => reject(new Error("Mongo wait timeout")), timeoutMs);
+    }),
+  ]);
+  if (mongoose.connection.readyState !== 1) {
+    throw new Error("Mongo not ready");
+  }
+}

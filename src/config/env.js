@@ -37,5 +37,7 @@ if (env.jwtSecret.length < 32 && env.nodeEnv === "production") {
 }
 
 if ((!env.smtpUser || !env.smtpPass) && env.nodeEnv === "production") {
-  throw new Error("SMTP_USER and SMTP_PASS are required in production for email OTP");
+  console.warn(
+    "SMTP_USER / SMTP_PASS are not set. Email OTP will fail until they are added in Vercel env vars."
+  );
 }

@@ -1,17 +1,15 @@
-import fs from "fs";
 import path from "path";
 import { randomBytes } from "crypto";
 import multer from "multer";
+import { ensureDir, getUploadRoot } from "../../lib/uploadRoot.js";
 
 const MAX_BYTES = 400 * 1024;
-const uploadRoot = path.join(process.cwd(), "uploads", "faculty");
+const uploadRoot = getUploadRoot("faculty");
 const ALLOWED_EXT = [".jpg", ".jpeg", ".png", ".webp", ".gif"];
 const ALLOWED_MIME = /^image\/(jpeg|png|gif|webp)$/i;
 
 function ensureUploadDir() {
-  if (!fs.existsSync(uploadRoot)) {
-    fs.mkdirSync(uploadRoot, { recursive: true });
-  }
+  ensureDir(uploadRoot);
 }
 
 const storage = multer.diskStorage({
