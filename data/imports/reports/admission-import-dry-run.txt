@@ -1,0 +1,312 @@
+================================================
+EXCEL ADMISSION IMPORT — DRY RUN REPORT
+================================================
+
+Total Excel Rows: 126
+Empty Rows: 0
+Valid Rows (non-empty): 126
+Rows Ready for Import: 112
+Skipped Rows: 0
+Resolved Courses (row-level): 126
+Unresolved Courses (row-level): 0
+Resolved Universities via Course: 126
+Resolved Batches (existing): 26
+Unresolved / new Batches: 100
+Potential Duplicates: 14
+Invalid Dates: 0
+Invalid Phone Numbers: 0
+Missing Required Fields: 0
+Term/Session Issues: 0
+
+Unmapped Excel Columns:
+- User id: Equals Student Code (stu_*) — not User._id or Student.studentId
+- Student Code: Format stu_* is incompatible with TNS-{year}-#####
+- G.R. No. / S.R. No.: No dedicated GR/SR field; almost all rows empty
+- Admission Type: All 126 cells empty; cannot map to mode from Excel
+- Admitted In Class: All 126 cells empty
+- Country Code: No schema field
+- Country: No schema field
+- Parents Code / Parents ID: No Parent collection
+- Father Occupation / Mother Occupation: No occupation fields
+- Father Contact NO / Mother Contact NO: No parent-specific phone fields; invalid 91- treated as missing
+
+================================================
+COURSE MAPPING
+================================================
+COPA - Computer Operator and Programming Assistant
+        ↓
+Matched Course Name: COPA
+        ↓
+Course Code: TNS-COPA
+        ↓
+Course ID: 6a95d83ad3ab118deb234efd
+        ↓
+Course Type: Institute
+        ↓
+University: Thakur Niranjan Singh I.T.I. & Computer
+Status: RESOLVED  Rows: 33
+
+PGDCA - Post Graduate Diploma in Computer Applications
+        ↓
+Matched Course Name: PGDCA
+        ↓
+Course Code: MCU-PGDCA
+        ↓
+Course ID: 6a8c95b081dde9bfeccf8051
+        ↓
+Course Type: University
+        ↓
+University: makhanlal chaturvedi university
+Status: RESOLVED  Rows: 26
+
+DCA - Diploma in Computer Applications
+        ↓
+Matched Course Name: DCA
+        ↓
+Course Code: MCU-DCA
+        ↓
+Course ID: 6a95d839d3ab118deb234ef2
+        ↓
+Course Type: University
+        ↓
+University: makhanlal chaturvedi university
+Status: RESOLVED  Rows: 40
+
+OMC OFFICE MANAGMENT COURSE
+        ↓
+Matched Course Name: OMC Office Management Course
+        ↓
+Course Code: TNS-OMC
+        ↓
+Course ID: 6a8d7f370a55d61cf2bbee72
+        ↓
+Course Type: Institute
+        ↓
+University: Thakur Niranjan Singh I.T.I. & Computer
+Status: RESOLVED  Rows: 22
+
+Rabindranath Tagore University (RNTU)
+        ↓
+Matched Course Name: PGDCA (RNTU)
+        ↓
+Course Code: RNTU-PGDCA
+        ↓
+Course ID: 6a95d83ad3ab118deb234efa
+        ↓
+Course Type: University
+        ↓
+University: Rabindranath Tagore University
+Status: RESOLVED  Rows: 1
+
+Bachelor of Arts
+        ↓
+Matched Course Name: BA
+        ↓
+Course Code: RDVV-BA
+        ↓
+Course ID: 6a95d839d3ab118deb234ef4
+        ↓
+Course Type: University
+        ↓
+University: Rani Durgavati Vishwavidyalaya
+Status: RESOLVED  Rows: 4
+
+================================================
+BATCH MAPPING
+================================================
+Excel Batch: COPA NEW BATCH 2026-27
+        ↓
+Course: COPA
+        ↓
+Matched Batch Name: COPA NEW BATCH 2026-27
+        ↓
+Batch ID: (none — would create if course resolved)
+        ↓
+Batch MongoDB ID: (none)
+        ↓
+Capacity: (n/a)
+        ↓
+Current Enrollment: (n/a)
+Status: WOULD_CREATE_BATCH  Rows: 13
+
+Excel Batch: PGDCA I SEM 12:00 TO 02:00 PM
+        ↓
+Course: PGDCA
+        ↓
+Matched Batch Name: PGDCA I SEM 12:00 TO 02:00 PM
+        ↓
+Batch ID: BAT-0002
+        ↓
+Batch MongoDB ID: 6a95d39ac7f2c9c547737d4c
+        ↓
+Capacity: 40
+        ↓
+Current Enrollment: 5
+Status: RESOLVED  Rows: 8
+
+Excel Batch: DCA SEM I 12:00 TO 14:00 PM
+        ↓
+Course: DCA
+        ↓
+Matched Batch Name: DCA SEM I 12:00 TO 14:00 PM
+        ↓
+Batch ID: (none — would create if course resolved)
+        ↓
+Batch MongoDB ID: (none)
+        ↓
+Capacity: (n/a)
+        ↓
+Current Enrollment: (n/a)
+Status: WOULD_CREATE_BATCH  Rows: 7
+
+Excel Batch: DCA SEM I 16:00 TO 18:00 PM
+        ↓
+Course: DCA
+        ↓
+Matched Batch Name: DCA SEM I 16:00 TO 18:00 PM
+        ↓
+Batch ID: (none — would create if course resolved)
+        ↓
+Batch MongoDB ID: (none)
+        ↓
+Capacity: (n/a)
+        ↓
+Current Enrollment: (n/a)
+Status: WOULD_CREATE_BATCH  Rows: 13
+
+Excel Batch: DCA SEM I 9:00 TO 11:00 AM
+        ↓
+Course: DCA
+        ↓
+Matched Batch Name: DCA SEM I 9:00 TO 11:00 AM
+        ↓
+Batch ID: (none — would create if course resolved)
+        ↓
+Batch MongoDB ID: (none)
+        ↓
+Capacity: (n/a)
+        ↓
+Current Enrollment: (n/a)
+Status: WOULD_CREATE_BATCH  Rows: 20
+
+Excel Batch: OMC - OFFICE MANAGMENT CERTIFICATE
+        ↓
+Course: OMC Office Management Course
+        ↓
+Matched Batch Name: OMC - OFFICE MANAGMENT CERTIFICATE
+        ↓
+Batch ID: (none — would create if course resolved)
+        ↓
+Batch MongoDB ID: (none)
+        ↓
+Capacity: (n/a)
+        ↓
+Current Enrollment: (n/a)
+Status: WOULD_CREATE_BATCH  Rows: 22
+
+Excel Batch: PGDCA SEM I 9:00 TO 11:00 AM
+        ↓
+Course: PGDCA
+        ↓
+Matched Batch Name: PGDCA SEM I 9:00 TO 11:00 AM
+        ↓
+Batch ID: BAT-0003
+        ↓
+Batch MongoDB ID: 6a95d39ec7f2c9c547737d54
+        ↓
+Capacity: 40
+        ↓
+Current Enrollment: 6
+Status: RESOLVED  Rows: 11
+
+Excel Batch: PGDCA
+        ↓
+Course: PGDCA (RNTU)
+        ↓
+Matched Batch Name: PGDCA
+        ↓
+Batch ID: (none — would create if course resolved)
+        ↓
+Batch MongoDB ID: (none)
+        ↓
+Capacity: (n/a)
+        ↓
+Current Enrollment: (n/a)
+Status: WOULD_CREATE_BATCH  Rows: 1
+
+Excel Batch: PGDCA I SEM 4:00 TO 6:00 PM
+        ↓
+Course: PGDCA
+        ↓
+Matched Batch Name: PGDCA I SEM 4:00 TO 6:00 PM
+        ↓
+Batch ID: BAT-0004
+        ↓
+Batch MongoDB ID: 6a95d3aac7f2c9c547737d6e
+        ↓
+Capacity: 40
+        ↓
+Current Enrollment: 3
+Status: RESOLVED  Rows: 7
+
+Excel Batch: BA I YEAR
+        ↓
+Course: BA
+        ↓
+Matched Batch Name: BA I YEAR
+        ↓
+Batch ID: (none — would create if course resolved)
+        ↓
+Batch MongoDB ID: (none)
+        ↓
+Capacity: (n/a)
+        ↓
+Current Enrollment: (n/a)
+Status: WOULD_CREATE_BATCH  Rows: 4
+
+Excel Batch: TRADE - COPA
+        ↓
+Course: COPA
+        ↓
+Matched Batch Name: TRADE - COPA
+        ↓
+Batch ID: (none — would create if course resolved)
+        ↓
+Batch MongoDB ID: (none)
+        ↓
+Capacity: (n/a)
+        ↓
+Current Enrollment: (n/a)
+Status: WOULD_CREATE_BATCH  Rows: 20
+
+================================================
+ROW ACTIONS (skipped / duplicate)
+================================================
+Row 3  HARSHITA RAI  DUPLICATE / ALREADY IMPORTED
+  - Existing via details.excelStudentCode
+Row 18  SHIVANI KACHHI  DUPLICATE / ALREADY IMPORTED
+  - Existing via details.excelStudentCode
+Row 19  PRABHAT RAJAK  DUPLICATE / ALREADY IMPORTED
+  - Existing via details.excelStudentCode
+Row 20  YASHWANT PATEL  DUPLICATE / ALREADY IMPORTED
+  - Existing via details.excelStudentCode
+Row 21  HIRA LAL KOL  DUPLICATE / ALREADY IMPORTED
+  - Existing via details.excelStudentCode
+Row 25  SANGEETA DEVI SEN  DUPLICATE / ALREADY IMPORTED
+  - Existing via details.excelStudentCode
+Row 35  AMIT KACHHI  DUPLICATE / ALREADY IMPORTED
+  - Existing via details.excelStudentCode
+Row 37  PUSHPANJALI KUSHWAHA  DUPLICATE / ALREADY IMPORTED
+  - Existing via details.excelStudentCode
+Row 48  MUSKAN PATWA  DUPLICATE / ALREADY IMPORTED
+  - Existing via details.excelStudentCode
+Row 62  AASHISH SEN  DUPLICATE / ALREADY IMPORTED
+  - Existing via details.excelStudentCode
+Row 67  KARAN PATEL  DUPLICATE / ALREADY IMPORTED
+  - Existing via details.excelStudentCode
+Row 86  HIMANSHI SONI  DUPLICATE / ALREADY IMPORTED
+  - Existing via details.excelStudentCode
+Row 90  ASTHA SAHU  DUPLICATE / ALREADY IMPORTED
+  - Existing via details.excelStudentCode
+Row 103  RASHI RAO  DUPLICATE / ALREADY IMPORTED
+  - Existing via details.excelStudentCode

@@ -1,0 +1,65 @@
+import { Router } from "express";
+import { requireMasterAdminJwt } from "../../middleware/requireMasterAdminJwt.js";
+import { educationDocumentUpload } from "../admissions/admissions.upload.js";
+import {
+  getStudentsController,
+  getStudentController,
+  getStudentStatsController,
+  getStudentMetaController,
+  createStudentController,
+  createFromAdmissionController,
+  updateStudentController,
+  updateStudentStatusController,
+  assignStudentBatchController,
+  syncStudentsController,
+} from "./students.controller.js";
+
+const router = Router();
+
+router.use(requireMasterAdminJwt);
+
+router.get("/", getStudentsController);
+router.get("/stats", getStudentStatsController);
+router.get("/meta", getStudentMetaController);
+router.post("/sync-from-admissions", syncStudentsController);
+router.post("/from-admission", createFromAdmissionController);
+router.post("/", createStudentController);
+
+router.post("/upload-document", (req, res, next) => {
+  educationDocumentUpload.single("file")(req, res, (err) => {
+    if (err) {
+      const isSize =
+        err.code === "LIMIT_FILE_SIZE" ||
+        /File too large/i.test(String(err.message || ""));
+      return res.status(400).json({
+        success: false,
+        message: isSize
+          ? "Document must be 400 KB or smaller"
+          : err.message || "Upload failed",
+      });
+    }
+    next();
+  });
+}, (req, res) => {
+  if (!req.file?.filename) {
+    return res.status(400).json({ success: false, message: "No document file received" });
+  }
+  return res.status(201).json({
+    success: true,
+    message: "Document uploaded",
+    data: {
+      url: `/uploads/admissions/education/${req.file.filename}`,
+      name: req.file.originalname || req.file.filename,
+      size: req.file.size,
+      mimeType: req.file.mimetype,
+    },
+  });
+});
+
+router.get("/:id", getStudentController);
+router.put("/:id", updateStudentController);
+router.patch("/:id", updateStudentController);
+router.patch("/:id/status", updateStudentStatusController);
+router.patch("/:id/batch", assignStudentBatchController);
+
+export default router;

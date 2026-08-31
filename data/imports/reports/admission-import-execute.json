@@ -1,0 +1,2334 @@
+{
+  "totalExcelRecords": 126,
+  "successfullyProcessed": 126,
+  "approvedAdmissionsCreated": 112,
+  "admissionsUpdated": 0,
+  "duplicateAdmissionsSkipped": 14,
+  "studentsCreated": 112,
+  "existingStudentsLinked": 14,
+  "studentsSuccessfullyBatchAssigned": 112,
+  "unresolvedCourses": 0,
+  "unresolvedBatches": 8,
+  "batchCapacityIssues": 0,
+  "invalidDates": 0,
+  "invalidPhoneNumbers": 0,
+  "missingRequiredData": 0,
+  "failedRecords": 0,
+  "unmappedExcelColumns": 10,
+  "approvedImportedNow": 126,
+  "studentsFromThisRun": 112,
+  "studentCodeMap": [
+    {
+      "excelRow": 2,
+      "excelStudentCode": "stu_260105050132",
+      "generatedStudentId": "TNS-2026-00016",
+      "admissionId": "ADM-2026-0016"
+    },
+    {
+      "excelRow": 4,
+      "excelStudentCode": "stu_260105050130",
+      "generatedStudentId": "TNS-2026-00017",
+      "admissionId": "ADM-2026-0017"
+    },
+    {
+      "excelRow": 5,
+      "excelStudentCode": "stu_260105050129",
+      "generatedStudentId": "TNS-2026-00018",
+      "admissionId": "ADM-2026-0018"
+    },
+    {
+      "excelRow": 6,
+      "excelStudentCode": "stu_260105050128",
+      "generatedStudentId": "TNS-2026-00019",
+      "admissionId": "ADM-2026-0019"
+    },
+    {
+      "excelRow": 7,
+      "excelStudentCode": "stu_260105050127",
+      "generatedStudentId": "TNS-2026-00020",
+      "admissionId": "ADM-2026-0020"
+    },
+    {
+      "excelRow": 8,
+      "excelStudentCode": "stu_260105050126",
+      "generatedStudentId": "TNS-2026-00021",
+      "admissionId": "ADM-2026-0021"
+    },
+    {
+      "excelRow": 9,
+      "excelStudentCode": "stu_260105050125",
+      "generatedStudentId": "TNS-2026-00022",
+      "admissionId": "ADM-2026-0022"
+    },
+    {
+      "excelRow": 10,
+      "excelStudentCode": "stu_260105050124",
+      "generatedStudentId": "TNS-2026-00023",
+      "admissionId": "ADM-2026-0023"
+    },
+    {
+      "excelRow": 11,
+      "excelStudentCode": "stu_260105050123",
+      "generatedStudentId": "TNS-2026-00024",
+      "admissionId": "ADM-2026-0024"
+    },
+    {
+      "excelRow": 12,
+      "excelStudentCode": "stu_260105050122",
+      "generatedStudentId": "TNS-2026-00025",
+      "admissionId": "ADM-2026-0025"
+    },
+    {
+      "excelRow": 13,
+      "excelStudentCode": "stu_260105050120",
+      "generatedStudentId": "TNS-2026-00026",
+      "admissionId": "ADM-2026-0026"
+    },
+    {
+      "excelRow": 14,
+      "excelStudentCode": "stu_260105050119",
+      "generatedStudentId": "TNS-2026-00027",
+      "admissionId": "ADM-2026-0027"
+    },
+    {
+      "excelRow": 15,
+      "excelStudentCode": "stu_260105050118",
+      "generatedStudentId": "TNS-2026-00028",
+      "admissionId": "ADM-2026-0028"
+    },
+    {
+      "excelRow": 16,
+      "excelStudentCode": "stu_260105050117",
+      "generatedStudentId": "TNS-2026-00029",
+      "admissionId": "ADM-2026-0029"
+    },
+    {
+      "excelRow": 17,
+      "excelStudentCode": "stu_260105050116",
+      "generatedStudentId": "TNS-2026-00030",
+      "admissionId": "ADM-2026-0030"
+    },
+    {
+      "excelRow": 22,
+      "excelStudentCode": "stu_260105050111",
+      "generatedStudentId": "TNS-2026-00031",
+      "admissionId": "ADM-2026-0031"
+    },
+    {
+      "excelRow": 23,
+      "excelStudentCode": "stu_260105050110",
+      "generatedStudentId": "TNS-2026-00032",
+      "admissionId": "ADM-2026-0032"
+    },
+    {
+      "excelRow": 24,
+      "excelStudentCode": "stu_260105050109",
+      "generatedStudentId": "TNS-2026-00033",
+      "admissionId": "ADM-2026-0033"
+    },
+    {
+      "excelRow": 26,
+      "excelStudentCode": "stu_260105050107",
+      "generatedStudentId": "TNS-2026-00034",
+      "admissionId": "ADM-2026-0034"
+    },
+    {
+      "excelRow": 27,
+      "excelStudentCode": "stu_260105050106",
+      "generatedStudentId": "TNS-2026-00035",
+      "admissionId": "ADM-2026-0035"
+    },
+    {
+      "excelRow": 28,
+      "excelStudentCode": "stu_260105050105",
+      "generatedStudentId": "TNS-2026-00036",
+      "admissionId": "ADM-2026-0036"
+    },
+    {
+      "excelRow": 29,
+      "excelStudentCode": "stu_260105050104",
+      "generatedStudentId": "TNS-2026-00037",
+      "admissionId": "ADM-2026-0037"
+    },
+    {
+      "excelRow": 30,
+      "excelStudentCode": "stu_260105050103",
+      "generatedStudentId": "TNS-2026-00038",
+      "admissionId": "ADM-2026-0038"
+    },
+    {
+      "excelRow": 31,
+      "excelStudentCode": "stu_260105050102",
+      "generatedStudentId": "TNS-2026-00039",
+      "admissionId": "ADM-2026-0039"
+    },
+    {
+      "excelRow": 32,
+      "excelStudentCode": "stu_260105050100",
+      "generatedStudentId": "TNS-2026-00040",
+      "admissionId": "ADM-2026-0040"
+    },
+    {
+      "excelRow": 33,
+      "excelStudentCode": "stu_26010505099",
+      "generatedStudentId": "TNS-2026-00041",
+      "admissionId": "ADM-2026-0041"
+    },
+    {
+      "excelRow": 34,
+      "excelStudentCode": "stu_26010505098",
+      "generatedStudentId": "TNS-2026-00042",
+      "admissionId": "ADM-2026-0042"
+    },
+    {
+      "excelRow": 36,
+      "excelStudentCode": "stu_26010505096",
+      "generatedStudentId": "TNS-2026-00043",
+      "admissionId": "ADM-2026-0043"
+    },
+    {
+      "excelRow": 38,
+      "excelStudentCode": "stu_26010505093",
+      "generatedStudentId": "TNS-2026-00044",
+      "admissionId": "ADM-2026-0044"
+    },
+    {
+      "excelRow": 39,
+      "excelStudentCode": "stu_26010505092",
+      "generatedStudentId": "TNS-2026-00045",
+      "admissionId": "ADM-2026-0045"
+    },
+    {
+      "excelRow": 40,
+      "excelStudentCode": "stu_26010505091",
+      "generatedStudentId": "TNS-2026-00046",
+      "admissionId": "ADM-2026-0046"
+    },
+    {
+      "excelRow": 41,
+      "excelStudentCode": "stu_26010505090",
+      "generatedStudentId": "TNS-2026-00047",
+      "admissionId": "ADM-2026-0047"
+    },
+    {
+      "excelRow": 42,
+      "excelStudentCode": "stu_26010505089",
+      "generatedStudentId": "TNS-2026-00048",
+      "admissionId": "ADM-2026-0048"
+    },
+    {
+      "excelRow": 43,
+      "excelStudentCode": "stu_26010505088",
+      "generatedStudentId": "TNS-2026-00049",
+      "admissionId": "ADM-2026-0049"
+    },
+    {
+      "excelRow": 44,
+      "excelStudentCode": "stu_26010505087",
+      "generatedStudentId": "TNS-2026-00050",
+      "admissionId": "ADM-2026-0050"
+    },
+    {
+      "excelRow": 45,
+      "excelStudentCode": "stu_26010505086",
+      "generatedStudentId": "TNS-2026-00051",
+      "admissionId": "ADM-2026-0051"
+    },
+    {
+      "excelRow": 46,
+      "excelStudentCode": "stu_26010505085",
+      "generatedStudentId": "TNS-2026-00052",
+      "admissionId": "ADM-2026-0052"
+    },
+    {
+      "excelRow": 47,
+      "excelStudentCode": "stu_26010505084",
+      "generatedStudentId": "TNS-2026-00053",
+      "admissionId": "ADM-2026-0053"
+    },
+    {
+      "excelRow": 49,
+      "excelStudentCode": "stu_26010505082",
+      "generatedStudentId": "TNS-2026-00054",
+      "admissionId": "ADM-2026-0054"
+    },
+    {
+      "excelRow": 50,
+      "excelStudentCode": "stu_26010505081",
+      "generatedStudentId": "TNS-2026-00055",
+      "admissionId": "ADM-2026-0055"
+    },
+    {
+      "excelRow": 51,
+      "excelStudentCode": "stu_26010505080",
+      "generatedStudentId": "TNS-2026-00056",
+      "admissionId": "ADM-2026-0056"
+    },
+    {
+      "excelRow": 52,
+      "excelStudentCode": "stu_26010505079",
+      "generatedStudentId": "TNS-2026-00057",
+      "admissionId": "ADM-2026-0057"
+    },
+    {
+      "excelRow": 53,
+      "excelStudentCode": "stu_26010505078",
+      "generatedStudentId": "TNS-2026-00058",
+      "admissionId": "ADM-2026-0058"
+    },
+    {
+      "excelRow": 54,
+      "excelStudentCode": "stu_26010505077",
+      "generatedStudentId": "TNS-2026-00059",
+      "admissionId": "ADM-2026-0059"
+    },
+    {
+      "excelRow": 55,
+      "excelStudentCode": "stu_26010505076",
+      "generatedStudentId": "TNS-2026-00060",
+      "admissionId": "ADM-2026-0060"
+    },
+    {
+      "excelRow": 56,
+      "excelStudentCode": "stu_26010505075",
+      "generatedStudentId": "TNS-2026-00061",
+      "admissionId": "ADM-2026-0061"
+    },
+    {
+      "excelRow": 57,
+      "excelStudentCode": "stu_26010505074",
+      "generatedStudentId": "TNS-2026-00062",
+      "admissionId": "ADM-2026-0062"
+    },
+    {
+      "excelRow": 58,
+      "excelStudentCode": "stu_26010505073",
+      "generatedStudentId": "TNS-2026-00063",
+      "admissionId": "ADM-2026-0063"
+    },
+    {
+      "excelRow": 59,
+      "excelStudentCode": "stu_26010505072",
+      "generatedStudentId": "TNS-2026-00064",
+      "admissionId": "ADM-2026-0064"
+    },
+    {
+      "excelRow": 60,
+      "excelStudentCode": "stu_26010505071",
+      "generatedStudentId": "TNS-2026-00065",
+      "admissionId": "ADM-2026-0065"
+    },
+    {
+      "excelRow": 61,
+      "excelStudentCode": "stu_26010505070",
+      "generatedStudentId": "TNS-2026-00066",
+      "admissionId": "ADM-2026-0066"
+    },
+    {
+      "excelRow": 63,
+      "excelStudentCode": "stu_26010505068",
+      "generatedStudentId": "TNS-2026-00067",
+      "admissionId": "ADM-2026-0067"
+    },
+    {
+      "excelRow": 64,
+      "excelStudentCode": "stu_26010505067",
+      "generatedStudentId": "TNS-2026-00068",
+      "admissionId": "ADM-2026-0068"
+    },
+    {
+      "excelRow": 65,
+      "excelStudentCode": "stu_26010505066",
+      "generatedStudentId": "TNS-2026-00069",
+      "admissionId": "ADM-2026-0069"
+    },
+    {
+      "excelRow": 66,
+      "excelStudentCode": "stu_26010505065",
+      "generatedStudentId": "TNS-2026-00070",
+      "admissionId": "ADM-2026-0070"
+    },
+    {
+      "excelRow": 68,
+      "excelStudentCode": "stu_26010505063",
+      "generatedStudentId": "TNS-2026-00071",
+      "admissionId": "ADM-2026-0071"
+    },
+    {
+      "excelRow": 69,
+      "excelStudentCode": "stu_26010505062",
+      "generatedStudentId": "TNS-2026-00072",
+      "admissionId": "ADM-2026-0072"
+    },
+    {
+      "excelRow": 70,
+      "excelStudentCode": "stu_26010505061",
+      "generatedStudentId": "TNS-2026-00073",
+      "admissionId": "ADM-2026-0073"
+    },
+    {
+      "excelRow": 71,
+      "excelStudentCode": "stu_26010505060",
+      "generatedStudentId": "TNS-2026-00074",
+      "admissionId": "ADM-2026-0074"
+    },
+    {
+      "excelRow": 72,
+      "excelStudentCode": "stu_26010505059",
+      "generatedStudentId": "TNS-2026-00075",
+      "admissionId": "ADM-2026-0075"
+    },
+    {
+      "excelRow": 73,
+      "excelStudentCode": "stu_26010505058",
+      "generatedStudentId": "TNS-2026-00076",
+      "admissionId": "ADM-2026-0076"
+    },
+    {
+      "excelRow": 74,
+      "excelStudentCode": "stu_26010505057",
+      "generatedStudentId": "TNS-2026-00077",
+      "admissionId": "ADM-2026-0077"
+    },
+    {
+      "excelRow": 75,
+      "excelStudentCode": "stu_26010505056",
+      "generatedStudentId": "TNS-2026-00078",
+      "admissionId": "ADM-2026-0078"
+    },
+    {
+      "excelRow": 76,
+      "excelStudentCode": "stu_26010505055",
+      "generatedStudentId": "TNS-2026-00079",
+      "admissionId": "ADM-2026-0079"
+    },
+    {
+      "excelRow": 77,
+      "excelStudentCode": "stu_26010505054",
+      "generatedStudentId": "TNS-2026-00080",
+      "admissionId": "ADM-2026-0080"
+    },
+    {
+      "excelRow": 78,
+      "excelStudentCode": "stu_26010505053",
+      "generatedStudentId": "TNS-2026-00081",
+      "admissionId": "ADM-2026-0081"
+    },
+    {
+      "excelRow": 79,
+      "excelStudentCode": "stu_26010505052",
+      "generatedStudentId": "TNS-2026-00082",
+      "admissionId": "ADM-2026-0082"
+    },
+    {
+      "excelRow": 80,
+      "excelStudentCode": "stu_26010505051",
+      "generatedStudentId": "TNS-2026-00083",
+      "admissionId": "ADM-2026-0083"
+    },
+    {
+      "excelRow": 81,
+      "excelStudentCode": "stu_26010505050",
+      "generatedStudentId": "TNS-2026-00084",
+      "admissionId": "ADM-2026-0084"
+    },
+    {
+      "excelRow": 82,
+      "excelStudentCode": "stu_26010505049",
+      "generatedStudentId": "TNS-2026-00085",
+      "admissionId": "ADM-2026-0085"
+    },
+    {
+      "excelRow": 83,
+      "excelStudentCode": "stu_26010505048",
+      "generatedStudentId": "TNS-2026-00086",
+      "admissionId": "ADM-2026-0086"
+    },
+    {
+      "excelRow": 84,
+      "excelStudentCode": "stu_26010505047",
+      "generatedStudentId": "TNS-2026-00087",
+      "admissionId": "ADM-2026-0087"
+    },
+    {
+      "excelRow": 85,
+      "excelStudentCode": "stu_26010505046",
+      "generatedStudentId": "TNS-2026-00088",
+      "admissionId": "ADM-2026-0088"
+    },
+    {
+      "excelRow": 87,
+      "excelStudentCode": "stu_26010505044",
+      "generatedStudentId": "TNS-2026-00089",
+      "admissionId": "ADM-2026-0089"
+    },
+    {
+      "excelRow": 88,
+      "excelStudentCode": "stu_26010505043",
+      "generatedStudentId": "TNS-2026-00090",
+      "admissionId": "ADM-2026-0090"
+    },
+    {
+      "excelRow": 89,
+      "excelStudentCode": "stu_26010505042",
+      "generatedStudentId": "TNS-2026-00091",
+      "admissionId": "ADM-2026-0091"
+    },
+    {
+      "excelRow": 91,
+      "excelStudentCode": "stu_26010505040",
+      "generatedStudentId": "TNS-2026-00092",
+      "admissionId": "ADM-2026-0092"
+    },
+    {
+      "excelRow": 92,
+      "excelStudentCode": "stu_26010505038",
+      "generatedStudentId": "TNS-2026-00093",
+      "admissionId": "ADM-2026-0093"
+    },
+    {
+      "excelRow": 93,
+      "excelStudentCode": "stu_26010505036",
+      "generatedStudentId": "TNS-2026-00094",
+      "admissionId": "ADM-2026-0094"
+    },
+    {
+      "excelRow": 94,
+      "excelStudentCode": "stu_26010505018",
+      "generatedStudentId": "TNS-2026-00095",
+      "admissionId": "ADM-2026-0095"
+    },
+    {
+      "excelRow": 95,
+      "excelStudentCode": "stu_26010505016",
+      "generatedStudentId": "TNS-2026-00096",
+      "admissionId": "ADM-2026-0096"
+    },
+    {
+      "excelRow": 96,
+      "excelStudentCode": "stu_26010505015",
+      "generatedStudentId": "TNS-2026-00097",
+      "admissionId": "ADM-2026-0097"
+    },
+    {
+      "excelRow": 97,
+      "excelStudentCode": "stu_26010505014",
+      "generatedStudentId": "TNS-2026-00098",
+      "admissionId": "ADM-2026-0098"
+    },
+    {
+      "excelRow": 98,
+      "excelStudentCode": "stu_26010505013",
+      "generatedStudentId": "TNS-2026-00099",
+      "admissionId": "ADM-2026-0099"
+    },
+    {
+      "excelRow": 99,
+      "excelStudentCode": "stu_26010505012",
+      "generatedStudentId": "TNS-2026-00100",
+      "admissionId": "ADM-2026-0100"
+    },
+    {
+      "excelRow": 100,
+      "excelStudentCode": "stu_2601050509",
+      "generatedStudentId": "TNS-2026-00101",
+      "admissionId": "ADM-2026-0101"
+    },
+    {
+      "excelRow": 101,
+      "excelStudentCode": "stu_2601050508",
+      "generatedStudentId": "TNS-2026-00102",
+      "admissionId": "ADM-2026-0102"
+    },
+    {
+      "excelRow": 102,
+      "excelStudentCode": "stu_2601050507",
+      "generatedStudentId": "TNS-2026-00103",
+      "admissionId": "ADM-2026-0103"
+    },
+    {
+      "excelRow": 104,
+      "excelStudentCode": "stu_2601050504",
+      "generatedStudentId": "TNS-2026-00104",
+      "admissionId": "ADM-2026-0104"
+    },
+    {
+      "excelRow": 105,
+      "excelStudentCode": "stu_2601050503",
+      "generatedStudentId": "TNS-2026-00105",
+      "admissionId": "ADM-2026-0105"
+    },
+    {
+      "excelRow": 106,
+      "excelStudentCode": "stu_2601050502",
+      "generatedStudentId": "TNS-2026-00106",
+      "admissionId": "ADM-2026-0106"
+    },
+    {
+      "excelRow": 107,
+      "excelStudentCode": "stu_2601050501",
+      "generatedStudentId": "TNS-2026-00107",
+      "admissionId": "ADM-2026-0107"
+    },
+    {
+      "excelRow": 108,
+      "excelStudentCode": "stu_26010505037",
+      "generatedStudentId": "TNS-2026-00108",
+      "admissionId": "ADM-2026-0108"
+    },
+    {
+      "excelRow": 109,
+      "excelStudentCode": "stu_26010505035",
+      "generatedStudentId": "TNS-2026-00109",
+      "admissionId": "ADM-2026-0109"
+    },
+    {
+      "excelRow": 110,
+      "excelStudentCode": "stu_26010505034",
+      "generatedStudentId": "TNS-2026-00110",
+      "admissionId": "ADM-2026-0110"
+    },
+    {
+      "excelRow": 111,
+      "excelStudentCode": "stu_26010505033",
+      "generatedStudentId": "TNS-2026-00111",
+      "admissionId": "ADM-2026-0111"
+    },
+    {
+      "excelRow": 112,
+      "excelStudentCode": "stu_26010505032",
+      "generatedStudentId": "TNS-2026-00112",
+      "admissionId": "ADM-2026-0112"
+    },
+    {
+      "excelRow": 113,
+      "excelStudentCode": "stu_26010505031",
+      "generatedStudentId": "TNS-2026-00113",
+      "admissionId": "ADM-2026-0113"
+    },
+    {
+      "excelRow": 114,
+      "excelStudentCode": "stu_26010505030",
+      "generatedStudentId": "TNS-2026-00114",
+      "admissionId": "ADM-2026-0114"
+    },
+    {
+      "excelRow": 115,
+      "excelStudentCode": "stu_26010505029",
+      "generatedStudentId": "TNS-2026-00115",
+      "admissionId": "ADM-2026-0115"
+    },
+    {
+      "excelRow": 116,
+      "excelStudentCode": "stu_26010505028",
+      "generatedStudentId": "TNS-2026-00116",
+      "admissionId": "ADM-2026-0116"
+    },
+    {
+      "excelRow": 117,
+      "excelStudentCode": "stu_26010505027",
+      "generatedStudentId": "TNS-2026-00117",
+      "admissionId": "ADM-2026-0117"
+    },
+    {
+      "excelRow": 118,
+      "excelStudentCode": "stu_26010505026",
+      "generatedStudentId": "TNS-2026-00118",
+      "admissionId": "ADM-2026-0118"
+    },
+    {
+      "excelRow": 119,
+      "excelStudentCode": "stu_26010505025",
+      "generatedStudentId": "TNS-2026-00119",
+      "admissionId": "ADM-2026-0119"
+    },
+    {
+      "excelRow": 120,
+      "excelStudentCode": "stu_26010505023",
+      "generatedStudentId": "TNS-2026-00120",
+      "admissionId": "ADM-2026-0120"
+    },
+    {
+      "excelRow": 121,
+      "excelStudentCode": "stu_26010505022",
+      "generatedStudentId": "TNS-2026-00121",
+      "admissionId": "ADM-2026-0121"
+    },
+    {
+      "excelRow": 122,
+      "excelStudentCode": "stu_26010505021",
+      "generatedStudentId": "TNS-2026-00122",
+      "admissionId": "ADM-2026-0122"
+    },
+    {
+      "excelRow": 123,
+      "excelStudentCode": "stu_26010505020",
+      "generatedStudentId": "TNS-2026-00123",
+      "admissionId": "ADM-2026-0123"
+    },
+    {
+      "excelRow": 124,
+      "excelStudentCode": "stu_26010505019",
+      "generatedStudentId": "TNS-2026-00124",
+      "admissionId": "ADM-2026-0124"
+    },
+    {
+      "excelRow": 125,
+      "excelStudentCode": "stu_26010505017",
+      "generatedStudentId": "TNS-2026-00125",
+      "admissionId": "ADM-2026-0125"
+    },
+    {
+      "excelRow": 126,
+      "excelStudentCode": "stu_26010505011",
+      "generatedStudentId": "TNS-2026-00126",
+      "admissionId": "ADM-2026-0126"
+    },
+    {
+      "excelRow": 127,
+      "excelStudentCode": "stu_26010505010",
+      "generatedStudentId": "TNS-2026-00127",
+      "admissionId": "ADM-2026-0127"
+    }
+  ],
+  "results": [
+    {
+      "excelRow": 2,
+      "student": "KANCHAN KORI",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0016",
+      "studentRecord": "TNS-2026-00016",
+      "batch": "COPA NEW BATCH 2026-27",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 3,
+      "student": "HARSHITA RAI",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0002",
+      "studentRecord": "TNS-2026-00002",
+      "batch": "PGDCA I SEM 12:00 TO 02:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "DUPLICATE — already in batch"
+    },
+    {
+      "excelRow": 4,
+      "student": "SAMEEKSHA SAHU",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0017",
+      "studentRecord": "TNS-2026-00017",
+      "batch": "COPA NEW BATCH 2026-27",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 5,
+      "student": "DEVENDRA CHOUDHARY",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0018",
+      "studentRecord": "TNS-2026-00018",
+      "batch": "COPA NEW BATCH 2026-27",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 6,
+      "student": "RANJEET DHANAK",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0019",
+      "studentRecord": "TNS-2026-00019",
+      "batch": "DCA SEM I 12:00 TO 14:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 7,
+      "student": "ADITYA",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0020",
+      "studentRecord": "TNS-2026-00020",
+      "batch": "DCA SEM I 12:00 TO 14:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 8,
+      "student": "NEHA MEHRA",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0021",
+      "studentRecord": "TNS-2026-00021",
+      "batch": "DCA SEM I 16:00 TO 18:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 9,
+      "student": "GAYTRI",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0022",
+      "studentRecord": "TNS-2026-00022",
+      "batch": "DCA SEM I 16:00 TO 18:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 10,
+      "student": "KANCHAN CHOUDHARY",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0023",
+      "studentRecord": "TNS-2026-00023",
+      "batch": "DCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 11,
+      "student": "KAMLESH RAJAK",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0024",
+      "studentRecord": "TNS-2026-00024",
+      "batch": "PGDCA I SEM 12:00 TO 02:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 12,
+      "student": "HEMANT KACHHI",
+      "course": "OMC Office Management Course — TNS-OMC",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0025",
+      "studentRecord": "TNS-2026-00025",
+      "batch": "OMC - OFFICE MANAGMENT CERTIFICATE",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 13,
+      "student": "YASH BATHRE",
+      "course": "OMC Office Management Course — TNS-OMC",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0026",
+      "studentRecord": "TNS-2026-00026",
+      "batch": "OMC - OFFICE MANAGMENT CERTIFICATE",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 14,
+      "student": "VIDHYAN CHAKRAVARTI",
+      "course": "OMC Office Management Course — TNS-OMC",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0027",
+      "studentRecord": "TNS-2026-00027",
+      "batch": "OMC - OFFICE MANAGMENT CERTIFICATE",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 15,
+      "student": "YOGESHWARI MEHRA",
+      "course": "OMC Office Management Course — TNS-OMC",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0028",
+      "studentRecord": "TNS-2026-00028",
+      "batch": "OMC - OFFICE MANAGMENT CERTIFICATE",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 16,
+      "student": "SAMEER AHMED",
+      "course": "OMC Office Management Course — TNS-OMC",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0029",
+      "studentRecord": "TNS-2026-00029",
+      "batch": "OMC - OFFICE MANAGMENT CERTIFICATE",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 17,
+      "student": "SARTHIK SAHU",
+      "course": "OMC Office Management Course — TNS-OMC",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0030",
+      "studentRecord": "TNS-2026-00030",
+      "batch": "OMC - OFFICE MANAGMENT CERTIFICATE",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 18,
+      "student": "SHIVANI KACHHI",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0003",
+      "studentRecord": "TNS-2026-00003",
+      "batch": "PGDCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "DUPLICATE — already in batch"
+    },
+    {
+      "excelRow": 19,
+      "student": "PRABHAT RAJAK",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0004",
+      "studentRecord": "TNS-2026-00004",
+      "batch": "PGDCA I SEM 12:00 TO 02:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "DUPLICATE — already in batch"
+    },
+    {
+      "excelRow": 20,
+      "student": "YASHWANT PATEL",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0005",
+      "studentRecord": "TNS-2026-00005",
+      "batch": "PGDCA I SEM 12:00 TO 02:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "DUPLICATE — already in batch"
+    },
+    {
+      "excelRow": 21,
+      "student": "HIRA LAL KOL",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0006",
+      "studentRecord": "TNS-2026-00006",
+      "batch": "PGDCA I SEM 12:00 TO 02:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "DUPLICATE — already in batch"
+    },
+    {
+      "excelRow": 22,
+      "student": "VIMLESH KUMAR PATEL",
+      "course": "PGDCA (RNTU) — RNTU-PGDCA",
+      "university": "Rabindranath Tagore University",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0031",
+      "studentRecord": "TNS-2026-00031",
+      "batch": "PGDCA",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 23,
+      "student": "SENHA RAJAK",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0032",
+      "studentRecord": "TNS-2026-00032",
+      "batch": "DCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 24,
+      "student": "SAKSHI MEHRA",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0033",
+      "studentRecord": "TNS-2026-00033",
+      "batch": "DCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 25,
+      "student": "SANGEETA DEVI SEN",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0007",
+      "studentRecord": "TNS-2026-00007",
+      "batch": "PGDCA I SEM 4:00 TO 6:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "DUPLICATE — already in batch"
+    },
+    {
+      "excelRow": 26,
+      "student": "DHRUV SHARMA",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0034",
+      "studentRecord": "TNS-2026-00034",
+      "batch": "DCA SEM I 16:00 TO 18:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 27,
+      "student": "KARTIK RAJAK",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0035",
+      "studentRecord": "TNS-2026-00035",
+      "batch": "COPA NEW BATCH 2026-27",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 28,
+      "student": "KRISHN KUMAR RAJAK",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0036",
+      "studentRecord": "TNS-2026-00036",
+      "batch": "COPA NEW BATCH 2026-27",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 29,
+      "student": "LAKSHAY AHIRWAR",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0037",
+      "studentRecord": "TNS-2026-00037",
+      "batch": "COPA NEW BATCH 2026-27",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 30,
+      "student": "RITIK SEN",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0038",
+      "studentRecord": "TNS-2026-00038",
+      "batch": "DCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 31,
+      "student": "SHRADDHA THAKUR",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0039",
+      "studentRecord": "TNS-2026-00039",
+      "batch": "DCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 32,
+      "student": "MONIKA YADAV",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0040",
+      "studentRecord": "TNS-2026-00040",
+      "batch": "COPA NEW BATCH 2026-27",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 33,
+      "student": "ALOK MASHRAM",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0041",
+      "studentRecord": "TNS-2026-00041",
+      "batch": "PGDCA I SEM 4:00 TO 6:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 34,
+      "student": "LAKHAN SINGH CHOUDHARY",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0042",
+      "studentRecord": "TNS-2026-00042",
+      "batch": "COPA NEW BATCH 2026-27",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 35,
+      "student": "AMIT KACHHI",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0008",
+      "studentRecord": "TNS-2026-00008",
+      "batch": "PGDCA I SEM 4:00 TO 6:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "DUPLICATE — already in batch"
+    },
+    {
+      "excelRow": 36,
+      "student": "SHUBHI SAHU",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0043",
+      "studentRecord": "TNS-2026-00043",
+      "batch": "DCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 37,
+      "student": "PUSHPANJALI KUSHWAHA",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0009",
+      "studentRecord": "TNS-2026-00009",
+      "batch": "PGDCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "DUPLICATE — already in batch"
+    },
+    {
+      "excelRow": 38,
+      "student": "JABIYA BEE",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0044",
+      "studentRecord": "TNS-2026-00044",
+      "batch": "DCA SEM I 16:00 TO 18:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 39,
+      "student": "EKTA VISHWAKARMA",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0045",
+      "studentRecord": "TNS-2026-00045",
+      "batch": "PGDCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 40,
+      "student": "ANJALI KAHAR",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0046",
+      "studentRecord": "TNS-2026-00046",
+      "batch": "DCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 41,
+      "student": "UMESH MEHRA",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0047",
+      "studentRecord": "TNS-2026-00047",
+      "batch": "DCA SEM I 12:00 TO 14:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 42,
+      "student": "PRADUM MISHRA",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0048",
+      "studentRecord": "TNS-2026-00048",
+      "batch": "DCA SEM I 12:00 TO 14:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 43,
+      "student": "SAHIL KHAN",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0049",
+      "studentRecord": "TNS-2026-00049",
+      "batch": "DCA SEM I 12:00 TO 14:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 44,
+      "student": "SURYAKANT LODHI",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0050",
+      "studentRecord": "TNS-2026-00050",
+      "batch": "DCA SEM I 12:00 TO 14:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 45,
+      "student": "SHIKHA",
+      "course": "BA — RDVV-BA",
+      "university": "Rani Durgavati Vishwavidyalaya",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0051",
+      "studentRecord": "TNS-2026-00051",
+      "batch": "BA I YEAR",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 46,
+      "student": "RAJ LODHI",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0052",
+      "studentRecord": "TNS-2026-00052",
+      "batch": "COPA NEW BATCH 2026-27",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 47,
+      "student": "YASH SAHU",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0053",
+      "studentRecord": "TNS-2026-00053",
+      "batch": "DCA SEM I 16:00 TO 18:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 48,
+      "student": "MUSKAN PATWA",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0010",
+      "studentRecord": "TNS-2026-00010",
+      "batch": "PGDCA I SEM 12:00 TO 02:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "DUPLICATE — already in batch"
+    },
+    {
+      "excelRow": 49,
+      "student": "HIMANSHU SAHU",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0054",
+      "studentRecord": "TNS-2026-00054",
+      "batch": "DCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 50,
+      "student": "RAKHI SEN",
+      "course": "BA — RDVV-BA",
+      "university": "Rani Durgavati Vishwavidyalaya",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0055",
+      "studentRecord": "TNS-2026-00055",
+      "batch": "BA I YEAR",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 51,
+      "student": "KAVITA SEN",
+      "course": "BA — RDVV-BA",
+      "university": "Rani Durgavati Vishwavidyalaya",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0056",
+      "studentRecord": "TNS-2026-00056",
+      "batch": "BA I YEAR",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 52,
+      "student": "RAMPAL LODHI",
+      "course": "BA — RDVV-BA",
+      "university": "Rani Durgavati Vishwavidyalaya",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0057",
+      "studentRecord": "TNS-2026-00057",
+      "batch": "BA I YEAR",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 53,
+      "student": "DEEPCHAND YADAV",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0058",
+      "studentRecord": "TNS-2026-00058",
+      "batch": "DCA SEM I 16:00 TO 18:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 54,
+      "student": "RANI KAHAR",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0059",
+      "studentRecord": "TNS-2026-00059",
+      "batch": "DCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 55,
+      "student": "VEDANT DUBEY",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0060",
+      "studentRecord": "TNS-2026-00060",
+      "batch": "COPA NEW BATCH 2026-27",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 56,
+      "student": "NISHA YADAV",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0061",
+      "studentRecord": "TNS-2026-00061",
+      "batch": "DCA SEM I 16:00 TO 18:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 57,
+      "student": "ANJANA YADAV",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0062",
+      "studentRecord": "TNS-2026-00062",
+      "batch": "DCA SEM I 16:00 TO 18:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 58,
+      "student": "RUDRA KUMAR YADAV",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0063",
+      "studentRecord": "TNS-2026-00063",
+      "batch": "DCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 59,
+      "student": "ANSHU YADAV",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0064",
+      "studentRecord": "TNS-2026-00064",
+      "batch": "DCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 60,
+      "student": "ABHISHEK KURMI",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0065",
+      "studentRecord": "TNS-2026-00065",
+      "batch": "PGDCA I SEM 12:00 TO 02:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 61,
+      "student": "SANYOGITA SEN",
+      "course": "OMC Office Management Course — TNS-OMC",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0066",
+      "studentRecord": "TNS-2026-00066",
+      "batch": "OMC - OFFICE MANAGMENT CERTIFICATE",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 62,
+      "student": "AASHISH SEN",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0011",
+      "studentRecord": "TNS-2026-00011",
+      "batch": "PGDCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "DUPLICATE — already in batch"
+    },
+    {
+      "excelRow": 63,
+      "student": "SHIVAM MEHRA",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0067",
+      "studentRecord": "TNS-2026-00067",
+      "batch": "PGDCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 64,
+      "student": "ADARSH KOURAV",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0068",
+      "studentRecord": "TNS-2026-00068",
+      "batch": "DCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 65,
+      "student": "RAGHVENDRA YADAV",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0069",
+      "studentRecord": "TNS-2026-00069",
+      "batch": "DCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 66,
+      "student": "JAYA PATEL",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0070",
+      "studentRecord": "TNS-2026-00070",
+      "batch": "PGDCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 67,
+      "student": "KARAN PATEL",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0012",
+      "studentRecord": "TNS-2026-00012",
+      "batch": "PGDCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "DUPLICATE — already in batch"
+    },
+    {
+      "excelRow": 68,
+      "student": "SHEKH FARHAN",
+      "course": "OMC Office Management Course — TNS-OMC",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0071",
+      "studentRecord": "TNS-2026-00071",
+      "batch": "OMC - OFFICE MANAGMENT CERTIFICATE",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 69,
+      "student": "SHEKH AHAN",
+      "course": "OMC Office Management Course — TNS-OMC",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0072",
+      "studentRecord": "TNS-2026-00072",
+      "batch": "OMC - OFFICE MANAGMENT CERTIFICATE",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 70,
+      "student": "ATHARV SAHU",
+      "course": "OMC Office Management Course — TNS-OMC",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0073",
+      "studentRecord": "TNS-2026-00073",
+      "batch": "OMC - OFFICE MANAGMENT CERTIFICATE",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 71,
+      "student": "IMTIYAZ KHAN",
+      "course": "OMC Office Management Course — TNS-OMC",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0074",
+      "studentRecord": "TNS-2026-00074",
+      "batch": "OMC - OFFICE MANAGMENT CERTIFICATE",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 72,
+      "student": "HARSHIT SEN",
+      "course": "OMC Office Management Course — TNS-OMC",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0075",
+      "studentRecord": "TNS-2026-00075",
+      "batch": "OMC - OFFICE MANAGMENT CERTIFICATE",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 73,
+      "student": "SHARAD VISHWAKARMA",
+      "course": "OMC Office Management Course — TNS-OMC",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0076",
+      "studentRecord": "TNS-2026-00076",
+      "batch": "OMC - OFFICE MANAGMENT CERTIFICATE",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 74,
+      "student": "PARI SEN",
+      "course": "OMC Office Management Course — TNS-OMC",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0077",
+      "studentRecord": "TNS-2026-00077",
+      "batch": "OMC - OFFICE MANAGMENT CERTIFICATE",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 75,
+      "student": "UNNATI RAJPUT",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0078",
+      "studentRecord": "TNS-2026-00078",
+      "batch": "DCA SEM I 12:00 TO 14:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 76,
+      "student": "SANJANA PATEL",
+      "course": "OMC Office Management Course — TNS-OMC",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0079",
+      "studentRecord": "TNS-2026-00079",
+      "batch": "OMC - OFFICE MANAGMENT CERTIFICATE",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 77,
+      "student": "SIMRAN SEN",
+      "course": "OMC Office Management Course — TNS-OMC",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0080",
+      "studentRecord": "TNS-2026-00080",
+      "batch": "OMC - OFFICE MANAGMENT CERTIFICATE",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 78,
+      "student": "ANMOL KUMAR SONI",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0081",
+      "studentRecord": "TNS-2026-00081",
+      "batch": "COPA NEW BATCH 2026-27",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 79,
+      "student": "RAJESH KUMAR CHOUDHARY",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0082",
+      "studentRecord": "TNS-2026-00082",
+      "batch": "COPA NEW BATCH 2026-27",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 80,
+      "student": "YUVRAJ SAHU",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0083",
+      "studentRecord": "TNS-2026-00083",
+      "batch": "DCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 81,
+      "student": "SATYAM BANJARA",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0084",
+      "studentRecord": "TNS-2026-00084",
+      "batch": "DCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 82,
+      "student": "KRISH PATEL",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0085",
+      "studentRecord": "TNS-2026-00085",
+      "batch": "DCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 83,
+      "student": "SURENDRA GOUND",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0086",
+      "studentRecord": "TNS-2026-00086",
+      "batch": "DCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 84,
+      "student": "ROHIT MEHRA",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0087",
+      "studentRecord": "TNS-2026-00087",
+      "batch": "DCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 85,
+      "student": "SRASHTI SEN",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0088",
+      "studentRecord": "TNS-2026-00088",
+      "batch": "PGDCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 86,
+      "student": "HIMANSHI SONI",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0013",
+      "studentRecord": "TNS-2026-00013",
+      "batch": "PGDCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "DUPLICATE — already in batch"
+    },
+    {
+      "excelRow": 87,
+      "student": "PALLAVI CHAKRAVARTI",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0089",
+      "studentRecord": "TNS-2026-00089",
+      "batch": "PGDCA I SEM 4:00 TO 6:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 88,
+      "student": "GAYATRI MARAVI",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0090",
+      "studentRecord": "TNS-2026-00090",
+      "batch": "DCA SEM I 16:00 TO 18:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 89,
+      "student": "POONAM BHARDWAJ",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0091",
+      "studentRecord": "TNS-2026-00091",
+      "batch": "PGDCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 90,
+      "student": "ASTHA SAHU",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0014",
+      "studentRecord": "TNS-2026-00014",
+      "batch": "PGDCA I SEM 4:00 TO 6:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "DUPLICATE — already in batch"
+    },
+    {
+      "excelRow": 91,
+      "student": "SUBHANGI SAHU",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0092",
+      "studentRecord": "TNS-2026-00092",
+      "batch": "PGDCA I SEM 4:00 TO 6:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 92,
+      "student": "VANSHIKA MEHRA",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0093",
+      "studentRecord": "TNS-2026-00093",
+      "batch": "DCA SEM I 16:00 TO 18:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 93,
+      "student": "HONEY MEHRA",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0094",
+      "studentRecord": "TNS-2026-00094",
+      "batch": "DCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 94,
+      "student": "RAJESHWARI CHOUDHARY",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0095",
+      "studentRecord": "TNS-2026-00095",
+      "batch": "COPA NEW BATCH 2026-27",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 95,
+      "student": "GOURI RAI",
+      "course": "OMC Office Management Course — TNS-OMC",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0096",
+      "studentRecord": "TNS-2026-00096",
+      "batch": "OMC - OFFICE MANAGMENT CERTIFICATE",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 96,
+      "student": "PAVAN SAHU",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0097",
+      "studentRecord": "TNS-2026-00097",
+      "batch": "DCA SEM I 16:00 TO 18:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 97,
+      "student": "SIMRAN MEHRA",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0098",
+      "studentRecord": "TNS-2026-00098",
+      "batch": "PGDCA I SEM 4:00 TO 6:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 98,
+      "student": "GOVIND SINGH THAKUR",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0099",
+      "studentRecord": "TNS-2026-00099",
+      "batch": "PGDCA I SEM 12:00 TO 02:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 99,
+      "student": "NEETA KACHHI",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0100",
+      "studentRecord": "TNS-2026-00100",
+      "batch": "DCA SEM I 16:00 TO 18:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 100,
+      "student": "IMTIYAZ KHAN",
+      "course": "OMC Office Management Course — TNS-OMC",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0101",
+      "studentRecord": "TNS-2026-00101",
+      "batch": "OMC - OFFICE MANAGMENT CERTIFICATE",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 101,
+      "student": "SANSKAR RAJAK",
+      "course": "OMC Office Management Course — TNS-OMC",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0102",
+      "studentRecord": "TNS-2026-00102",
+      "batch": "OMC - OFFICE MANAGMENT CERTIFICATE",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 102,
+      "student": "BHAGYSHRI KUSHWAHA",
+      "course": "OMC Office Management Course — TNS-OMC",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0103",
+      "studentRecord": "TNS-2026-00103",
+      "batch": "OMC - OFFICE MANAGMENT CERTIFICATE",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 103,
+      "student": "RASHI RAO",
+      "course": "PGDCA — MCU-PGDCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0015",
+      "studentRecord": "TNS-2026-00015",
+      "batch": "PGDCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "DUPLICATE — already in batch"
+    },
+    {
+      "excelRow": 104,
+      "student": "SHEKH FARHAN",
+      "course": "OMC Office Management Course — TNS-OMC",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0104",
+      "studentRecord": "TNS-2026-00104",
+      "batch": "OMC - OFFICE MANAGMENT CERTIFICATE",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 105,
+      "student": "SHEKH AHAN",
+      "course": "OMC Office Management Course — TNS-OMC",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0105",
+      "studentRecord": "TNS-2026-00105",
+      "batch": "OMC - OFFICE MANAGMENT CERTIFICATE",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 106,
+      "student": "ARUSHI VERMA",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0106",
+      "studentRecord": "TNS-2026-00106",
+      "batch": "DCA SEM I 9:00 TO 11:00 AM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 107,
+      "student": "LAXMI KACHHI",
+      "course": "DCA — MCU-DCA",
+      "university": "makhanlal chaturvedi university",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0107",
+      "studentRecord": "TNS-2026-00107",
+      "batch": "DCA SEM I 16:00 TO 18:00 PM",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 108,
+      "student": "ANURGAH NAROLIA",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0108",
+      "studentRecord": "TNS-2026-00108",
+      "batch": "TRADE - COPA",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 109,
+      "student": "KHUSHBOO GOSWAMI",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0109",
+      "studentRecord": "TNS-2026-00109",
+      "batch": "TRADE - COPA",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 110,
+      "student": "SNEHA MEHRA",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0110",
+      "studentRecord": "TNS-2026-00110",
+      "batch": "TRADE - COPA",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 111,
+      "student": "NEELKANTH RAI",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0111",
+      "studentRecord": "TNS-2026-00111",
+      "batch": "TRADE - COPA",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 112,
+      "student": "ALISHA RAI",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0112",
+      "studentRecord": "TNS-2026-00112",
+      "batch": "TRADE - COPA",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 113,
+      "student": "ARPIT PARASAR",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0113",
+      "studentRecord": "TNS-2026-00113",
+      "batch": "TRADE - COPA",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 114,
+      "student": "ABHISHEK",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0114",
+      "studentRecord": "TNS-2026-00114",
+      "batch": "TRADE - COPA",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 115,
+      "student": "AAYUSH RAJPUT",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0115",
+      "studentRecord": "TNS-2026-00115",
+      "batch": "TRADE - COPA",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 116,
+      "student": "ABHILASHA MEHRA",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0116",
+      "studentRecord": "TNS-2026-00116",
+      "batch": "TRADE - COPA",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 117,
+      "student": "PARTH SARTHI NEMA",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0117",
+      "studentRecord": "TNS-2026-00117",
+      "batch": "TRADE - COPA",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 118,
+      "student": "AMBIKA DEHARIYA",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0118",
+      "studentRecord": "TNS-2026-00118",
+      "batch": "TRADE - COPA",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 119,
+      "student": "GAGAN RAI",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0119",
+      "studentRecord": "TNS-2026-00119",
+      "batch": "TRADE - COPA",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 120,
+      "student": "RITENDRA THAKUR",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0120",
+      "studentRecord": "TNS-2026-00120",
+      "batch": "TRADE - COPA",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 121,
+      "student": "RAKSHA PATEL",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0121",
+      "studentRecord": "TNS-2026-00121",
+      "batch": "TRADE - COPA",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 122,
+      "student": "ARYA PATWA",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0122",
+      "studentRecord": "TNS-2026-00122",
+      "batch": "TRADE - COPA",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 123,
+      "student": "ATHARV SHEERSH NEMA",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0123",
+      "studentRecord": "TNS-2026-00123",
+      "batch": "TRADE - COPA",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 124,
+      "student": "NANDINI YADAV",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0124",
+      "studentRecord": "TNS-2026-00124",
+      "batch": "TRADE - COPA",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 125,
+      "student": "ANSH KUSHWAHA",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0125",
+      "studentRecord": "TNS-2026-00125",
+      "batch": "TRADE - COPA",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 126,
+      "student": "ROHIT PATEL",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0126",
+      "studentRecord": "TNS-2026-00126",
+      "batch": "TRADE - COPA",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    },
+    {
+      "excelRow": 127,
+      "student": "BABLU",
+      "course": "COPA — TNS-COPA",
+      "university": "Thakur Niranjan Singh I.T.I. & Computer",
+      "admissionStatus": "Approved",
+      "admission": "ADM-2026-0127",
+      "studentRecord": "TNS-2026-00127",
+      "batch": "TRADE - COPA",
+      "batchAssigned": true,
+      "error": "",
+      "action": "CREATED"
+    }
+  ]
+}
