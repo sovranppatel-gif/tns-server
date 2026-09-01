@@ -181,6 +181,7 @@ function recomputeTotals(doc) {
 function buildInstallments({
   totalAmount,
   registrationFee,
+  examFee,
   startDate,
 }) {
   const start = startDate instanceof Date ? startDate : new Date(startDate || Date.now());
@@ -202,10 +203,25 @@ function buildInstallments({
     remaining -= reg;
   }
 
+  if (examFee > 0) {
+    const exam = Math.min(examFee, remaining);
+    items.push({
+      id: "INS-EXAM",
+      label: "Exam Fee",
+      category: "Exam",
+      amount: exam,
+      paid: 0,
+      dueDate: start,
+      paidDate: null,
+      status: "Due",
+    });
+    remaining -= exam;
+  }
+
   if (remaining > 0) {
     items.push({
       id: "INS-BAL",
-      label: "Remaining Fee",
+      label: "Tuition Fee",
       category: "Tuition",
       amount: remaining,
       paid: 0,
@@ -218,7 +234,7 @@ function buildInstallments({
   if (items.length === 0) {
     items.push({
       id: "INS-BAL",
-      label: "Course Fee",
+      label: "Tuition Fee",
       category: "Tuition",
       amount: Math.max(0, totalAmount),
       paid: 0,
@@ -231,16 +247,26 @@ function buildInstallments({
   return items;
 }
 
-function applyPaymentToInstallments(installments, amount, paidAt = new Date(), preferredId = "") {
+function applyPaymentToInstallments(
+  installments,
+  amount,
+  paidAt = new Date(),
+  preferredId = "",
+  allowedIds = null,
+) {
   let left = Math.max(0, Number(amount) || 0);
   let next = installments.map((ins) => ({ ...ins }));
   let lastTouched = "";
+  const allowed = allowedIds ? new Set(allowedIds) : null;
+  const canTouch = (ins) => !allowed || allowed.has(ins.id);
 
   if (preferredId) {
     const idx = next.findIndex((i) => i.id === preferredId);
     if (idx >= 0) {
-      const ordered = [next[idx], ...next.filter((_, i) => i !== idx)];
-      const applied = applyPaymentToInstallments(ordered, left, paidAt, "");
+      const preferred = next[idx];
+      const rest = next.filter((_, i) => i !== idx).filter(canTouch);
+      const ordered = [preferred, ...rest];
+      const applied = applyPaymentToInstallments(ordered, left, paidAt, "", allowedIds);
       const map = new Map(applied.installments.map((i) => [i.id, i]));
       next = next.map((i) => map.get(i.id) || i);
       return {
@@ -253,6 +279,7 @@ function applyPaymentToInstallments(installments, amount, paidAt = new Date(), p
 
   for (const ins of next) {
     if (left <= 0) break;
+    if (!canTouch(ins)) continue;
     const need = Math.max(0, (Number(ins.amount) || 0) - (Number(ins.paid) || 0));
     if (need <= 0) continue;
     const apply = Math.min(need, left);
@@ -300,7 +327,8 @@ function sumSuccessfulDiscounts(payments) {
  * Used after editing/cancelling a payment so totals stay consistent.
  */
 function rebuildInstallmentsFromPayments(installments, payments) {
-  let next = resetInstallmentPaid(installments);
+  let next = sizeExtraInstallmentsFromPayments(installments, payments);
+  next = resetInstallmentPaid(next);
   const ordered = (payments || [])
     .slice()
     .filter(isSuccessfulPayment)
@@ -314,7 +342,17 @@ function rebuildInstallmentsFromPayments(installments, payments) {
     const amount = Number(pay.amount) || 0;
     if (amount <= 0) continue;
     const paidAt = pay.date ? new Date(pay.date) : new Date();
-    const applied = applyPaymentToInstallments(next, amount, paidAt, pay.installmentId || "");
+    const type = findFeeType(pay.installmentId);
+    const allowedIds = isExtraFeeType(type)
+      ? [type.id]
+      : next.filter(isCourseInstallment).map((i) => i.id);
+    const applied = applyPaymentToInstallments(
+      next,
+      amount,
+      paidAt,
+      pay.installmentId || "",
+      allowedIds
+    );
     next = applied.installments;
     const idx = updatedPayments.findIndex((p) => p.id === pay.id);
     if (idx >= 0 && applied.installmentId) {
@@ -375,6 +413,11 @@ const FEE_TYPES = [
   { id: "INS-OTHER", label: "Other Fee", category: "Other" },
 ];
 
+const COURSE_FEE_TYPE_IDS = new Set(["INS-REG", "INS-BAL", "INS-EXAM"]);
+const EXTRA_FEE_TYPE_IDS = new Set(
+  FEE_TYPES.filter((t) => !COURSE_FEE_TYPE_IDS.has(t.id)).map((t) => t.id)
+);
+
 function findFeeType(idOrKey) {
   const key = String(idOrKey || "").trim();
   if (!key) return null;
@@ -387,14 +430,74 @@ function findFeeType(idOrKey) {
   );
 }
 
-function splitFeeTypeInstallment(installments, type, amount, dueDate) {
-  const list = (installments || []).map((i) =>
-    typeof i.toObject === "function" ? i.toObject() : { ...i }
+function isExtraFeeType(type) {
+  return Boolean(type?.id) && EXTRA_FEE_TYPE_IDS.has(type.id);
+}
+
+function isCourseInstallment(ins) {
+  if (!ins) return false;
+  if (EXTRA_FEE_TYPE_IDS.has(ins.id)) return false;
+  const category = String(ins.category || "").trim().toLowerCase();
+  if (["library", "apps", "lab", "hostel", "transport", "other"].includes(category)) {
+    return false;
+  }
+  return true;
+}
+
+function cloneInstallments(installments = []) {
+  return (installments || []).map((ins) =>
+    typeof ins.toObject === "function" ? ins.toObject() : { ...ins }
   );
+}
+
+function addOrGrowExtraFeeInstallment(installments, type, amount, dueDate) {
+  const list = cloneInstallments(installments);
+  if (!type?.id || amount <= 0) return list;
+  const existing = list.find((i) => i.id === type.id);
+  if (existing) {
+    const remaining = Math.max(
+      0,
+      (Number(existing.amount) || 0) - (Number(existing.paid) || 0)
+    );
+    if (amount > remaining) {
+      existing.amount = (Number(existing.amount) || 0) + (amount - remaining);
+    }
+    return list;
+  }
+  list.push({
+    id: type.id,
+    label: type.label,
+    category: type.category,
+    amount,
+    paid: 0,
+    dueDate: dueDate || new Date(),
+    paidDate: null,
+    status: "Due",
+  });
+  return list;
+}
+
+function sizeExtraInstallmentsFromPayments(installments, payments) {
+  let next = cloneInstallments(installments);
+  const sums = new Map();
+  for (const pay of payments || []) {
+    if (!isSuccessfulPayment(pay)) continue;
+    const type = findFeeType(pay.installmentId);
+    if (!isExtraFeeType(type)) continue;
+    sums.set(type.id, (sums.get(type.id) || 0) + (Number(pay.amount) || 0));
+  }
+  for (const [id, sum] of sums.entries()) {
+    next = addOrGrowExtraFeeInstallment(next, findFeeType(id), sum, new Date());
+  }
+  return next;
+}
+
+function splitFeeTypeInstallment(installments, type, amount, dueDate) {
+  const list = cloneInstallments(installments);
   if (!type?.id || amount <= 0 || list.some((i) => i.id === type.id)) return list;
 
   const source = [...list]
-    .filter((i) => i.id !== type.id && i.id !== "INS-REG")
+    .filter((i) => isCourseInstallment(i) && i.id !== type.id && i.id !== "INS-REG")
     .sort((a, b) => {
       const unpaidA = Math.max(0, (Number(a.amount) || 0) - (Number(a.paid) || 0));
       const unpaidB = Math.max(0, (Number(b.amount) || 0) - (Number(b.paid) || 0));
@@ -440,10 +543,13 @@ function splitRegistrationInstallment(installments, registrationFee, dueDate) {
   );
 }
 
-async function persistRegistrationInstallment(doc) {
+async function persistCourseFeeInstallments(doc) {
   if (!doc) return doc;
-  const current = doc.installments || [];
-  if (current.some(isRegistrationInstallment)) return doc;
+  let current = cloneInstallments(doc.installments);
+  const hasReg = current.some(isRegistrationInstallment);
+  const hasExam = current.some((i) => i.id === "INS-EXAM" || String(i.category || "") === "Exam");
+
+  if (hasReg && hasExam) return doc;
 
   const course = await findCourseForAdmission({
     course: doc.course,
@@ -453,22 +559,49 @@ async function persistRegistrationInstallment(doc) {
     parseMoney(doc.registrationFee) ||
     parseMoney(doc.courseFees?.registration) ||
     parseMoney(course?.fees?.registration);
-  if (registrationFee <= 0) return doc;
+  const examFee =
+    parseMoney(doc.examFee) ||
+    parseMoney(doc.courseFees?.exam) ||
+    parseMoney(course?.fees?.exam);
 
-  const split = splitRegistrationInstallment(
-    current,
-    registrationFee,
-    doc.nextDueDate || new Date()
-  );
-  if (split === current || !split.some(isRegistrationInstallment)) return doc;
+  let changed = false;
+  if (!hasReg && registrationFee > 0) {
+    const split = splitFeeTypeInstallment(
+      current,
+      findFeeType("INS-REG"),
+      registrationFee,
+      doc.nextDueDate || new Date()
+    );
+    if (split.some(isRegistrationInstallment)) {
+      current = split;
+      changed = true;
+    }
+  }
+  if (!hasExam && examFee > 0) {
+    const split = splitFeeTypeInstallment(
+      current,
+      findFeeType("INS-EXAM"),
+      examFee,
+      doc.nextDueDate || new Date()
+    );
+    if (split.some((i) => i.id === "INS-EXAM")) {
+      current = split;
+      changed = true;
+    }
+  }
+  if (!changed) return doc;
 
-  const recomputed = recomputeTotals({ installments: split });
+  const recomputed = recomputeTotals({ installments: current });
   const courseFees = {
     ...(doc.courseFees || {}),
     registration:
       doc.courseFees?.registration ||
       course?.fees?.registration ||
-      formatINR(registrationFee),
+      (registrationFee ? formatINR(registrationFee) : doc.courseFees?.registration || ""),
+    exam:
+      doc.courseFees?.exam ||
+      course?.fees?.exam ||
+      (examFee ? formatINR(examFee) : doc.courseFees?.exam || ""),
   };
 
   await StudentFee.updateOne(
@@ -476,7 +609,8 @@ async function persistRegistrationInstallment(doc) {
     {
       $set: {
         ...recomputed,
-        registrationFee,
+        registrationFee: registrationFee || doc.registrationFee || 0,
+        examFee: examFee || doc.examFee || 0,
         courseFees,
         syncedAt: new Date(),
       },
@@ -486,9 +620,14 @@ async function persistRegistrationInstallment(doc) {
   return {
     ...doc,
     ...recomputed,
-    registrationFee,
+    registrationFee: registrationFee || doc.registrationFee || 0,
+    examFee: examFee || doc.examFee || 0,
     courseFees,
   };
+}
+
+async function persistRegistrationInstallment(doc) {
+  return persistCourseFeeInstallments(doc);
 }
 
 async function findCourseForAdmission(admission, courseCache = null) {
@@ -717,6 +856,7 @@ async function createFeeFromAdmission(admission, course) {
   let installments = buildInstallments({
     totalAmount: amounts.totalAmount,
     registrationFee: amounts.registrationFee,
+    examFee: amounts.examFee,
     startDate,
   });
 
@@ -810,6 +950,7 @@ export async function upsertFeeFromAdmission(admissionInput) {
   let installments = buildInstallments({
     totalAmount: amounts.totalAmount,
     registrationFee: amounts.registrationFee,
+    examFee: amounts.examFee,
     startDate,
   });
 
@@ -1032,10 +1173,13 @@ export async function recordFeePayment(id, payload = {}, editor = "master-admin"
   }
 
   const hadRegistration = (doc.installments || []).some(isRegistrationInstallment);
+  const hadExam = (doc.installments || []).some(
+    (i) => i.id === "INS-EXAM" || String(i.category || "") === "Exam"
+  );
   await persistRegistrationInstallment(
     typeof doc.toObject === "function" ? doc.toObject() : doc
   );
-  if (!hadRegistration) {
+  if (!hadRegistration || !hadExam) {
     const reloaded = await StudentFee.findOne(query);
     if (reloaded) doc = reloaded;
   }
@@ -1054,7 +1198,31 @@ export async function recordFeePayment(id, payload = {}, editor = "master-admin"
 
   const selectedType =
     findFeeType(payload.installmentId) || findFeeType(payload.feeType);
-  if (
+  const extraType = isExtraFeeType(selectedType);
+  const isDiscount =
+    String(payload.type || "").trim().toLowerCase() === "discount" ||
+    isDiscountPayment({ method: payload.method });
+
+  if (extraType) {
+    if (isDiscount) {
+      const existing = installments.find((i) => i.id === selectedType.id);
+      const extraDue = existing
+        ? Math.max(0, (Number(existing.amount) || 0) - (Number(existing.paid) || 0))
+        : 0;
+      if (extraDue <= 0) {
+        const err = new Error("No outstanding extra fee to apply this discount");
+        err.status = 400;
+        throw err;
+      }
+    } else {
+      installments = addOrGrowExtraFeeInstallment(
+        installments,
+        selectedType,
+        amount,
+        paidAt
+      );
+    }
+  } else if (
     selectedType &&
     selectedType.id !== "INS-BAL" &&
     !installments.some((i) => i.id === selectedType.id)
@@ -1068,40 +1236,32 @@ export async function recordFeePayment(id, payload = {}, editor = "master-admin"
     if (selectedType.id === "INS-REG") {
       doc.registrationFee = amount;
     }
+    if (selectedType.id === "INS-EXAM") {
+      doc.examFee = amount;
+    }
   }
+
+  const allowedIds = extraType
+    ? [selectedType.id]
+    : installments.filter(isCourseInstallment).map((i) => i.id);
 
   let targetInstallments = installments;
   let leftover = 0;
   let touchedId = "";
 
-  if (payload.installmentId) {
-    const idx = installments.findIndex((i) => i.id === payload.installmentId);
-    if (idx >= 0) {
-      const ordered = [
-        installments[idx],
-        ...installments.filter((_, i) => i !== idx),
-      ];
-      const applied = applyPaymentToInstallments(ordered, amount, paidAt);
-      const map = new Map(applied.installments.map((i) => [i.id, i]));
-      targetInstallments = installments.map((i) => map.get(i.id) || i);
-      leftover = applied.leftover;
-      touchedId = applied.installmentId || payload.installmentId;
-    } else {
-      const applied = applyPaymentToInstallments(installments, amount, paidAt);
-      targetInstallments = applied.installments;
-      leftover = applied.leftover;
-      touchedId = applied.installmentId;
-    }
-  } else {
-    const applied = applyPaymentToInstallments(installments, amount, paidAt);
-    targetInstallments = applied.installments;
-    leftover = applied.leftover;
-    touchedId = applied.installmentId;
-  }
-
-  const isDiscount =
-    String(payload.type || "").trim().toLowerCase() === "discount" ||
-    isDiscountPayment({ method: payload.method });
+  const preferredId = extraType
+    ? selectedType.id
+    : payload.installmentId || selectedType?.id || "";
+  const applied = applyPaymentToInstallments(
+    installments,
+    amount,
+    paidAt,
+    preferredId,
+    allowedIds
+  );
+  targetInstallments = applied.installments;
+  leftover = applied.leftover;
+  touchedId = applied.installmentId || preferredId;
 
   const credited = amount - (leftover || 0);
   if (credited <= 0) {
