@@ -5,6 +5,7 @@ import { StudentFee, FEE_STATUSES } from "./fees.model.js";
 import { emitSectionUpdate } from "../../lib/socket.js";
 import { createActivityLog } from "../activityLog/activityLog.service.js";
 import { notifyFeePaymentApproved } from "../../lib/studentNotifications.js";
+import { onFeePaymentRecorded, onFeePaymentUpdated } from "../finance/feeBridge.js";
 
 export function parseMoney(value) {
   if (typeof value === "number" && Number.isFinite(value)) {
@@ -1317,7 +1318,13 @@ export async function recordFeePayment(id, payload = {}, editor = "master-admin"
       : `Payment recorded for ${doc.feeId}`,
   });
 
-  return toDetail(doc.toObject());
+  const saved = doc.toObject();
+  const recorded = (saved.payments || []).find((p) => p.id === payId);
+  if (recorded && !isDiscount) {
+    void onFeePaymentRecorded(saved, recorded, editor);
+  }
+
+  return toDetail(saved);
 }
 
 const PAYMENT_STATUSES = ["Success", "Pending", "Failed", "Cancelled", "Refunded"];
@@ -1471,13 +1478,16 @@ export async function updateFeePayment(id, paymentId, payload = {}, editor = "ma
   const prevStatus = String(current.status || "").trim().toLowerCase();
   const becameSuccess =
     isSuccessfulPayment(updatedPayment) && prevStatus !== "success" && prevStatus !== "paid" && prevStatus !== "completed";
+  const saved = doc.toObject ? doc.toObject() : doc;
   if (becameSuccess) {
-    void notifyFeePaymentApproved(doc.toObject ? doc.toObject() : doc, updatedPayment).catch((err) => {
+    void notifyFeePaymentApproved(saved, updatedPayment).catch((err) => {
       console.error("fee payment notify failed:", err?.message || err);
     });
   }
 
-  return toDetail(doc.toObject());
+  void onFeePaymentUpdated(saved, updatedPayment, current, editor);
+
+  return toDetail(saved);
 }
 
 /**

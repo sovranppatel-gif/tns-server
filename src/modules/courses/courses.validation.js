@@ -139,8 +139,7 @@ function normalizeSemesterFees(raw) {
       const tuition = toMoneyNumber(item.tuition, 0);
       const registration = toMoneyNumber(item.registration, 0);
       const exam = toMoneyNumber(item.exam, 0);
-      const other = toMoneyNumber(item.other, 0);
-      const computed = tuition + registration + exam + other;
+      const computed = tuition + registration + exam;
       const total = toMoneyNumber(item.total, computed) || computed;
       if (!computed && !total) return null;
       return {
@@ -148,7 +147,6 @@ function normalizeSemesterFees(raw) {
         tuition,
         registration,
         exam,
-        other,
         total,
       };
     })
@@ -182,7 +180,6 @@ function normalizeFees(raw = {}, structureType = "Semester") {
     registration: normalizeFeeString(src.registration),
     exam: normalizeFeeString(src.exam),
     tuition: normalizeFeeString(src.tuition),
-    other: normalizeFeeString(src.other),
     installmentAllowed,
     installments: normalizeInstallments(src.installments, installmentAllowed),
     semesterFees,

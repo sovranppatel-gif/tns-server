@@ -84,7 +84,6 @@ function toRow(doc) {
       registration: fees.registration || "",
       exam: fees.exam || "",
       tuition: fees.tuition || "",
-      other: fees.other || "",
       installmentAllowed:
         typeof fees.installmentAllowed === "boolean" ? fees.installmentAllowed : true,
       installments: Array.isArray(fees.installments) ? fees.installments : [],

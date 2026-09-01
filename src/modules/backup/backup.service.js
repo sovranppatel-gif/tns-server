@@ -28,6 +28,20 @@ const ERP_COLLECTIONS = new Set([
   "staffdesignations",
   "staffcategories",
   "staffshifts",
+  "chartaccounts",
+  "financialaccounts",
+  "accountingtransactions",
+  "financepayments",
+  "expensecategories",
+  "expenses",
+  "incomecategories",
+  "incomerecords",
+  "salarystructures",
+  "employeeadvances",
+  "employeeloans",
+  "payrollruns",
+  "payrollitems",
+  "financesequences",
 ]);
 
 const EXAM_COLLECTIONS = new Set([

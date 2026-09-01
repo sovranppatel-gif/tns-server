@@ -34,6 +34,17 @@ import analyticsRoutes from "./modules/analytics/analytics.routes.js";
 import backupRoutes from "./modules/backup/backup.routes.js";
 import facultyRoutes from "./modules/faculty/faculty.routes.js";
 import staffRoutes from "./modules/staff/staff.routes.js";
+import {
+  accountingRouter,
+  advancesRouter,
+  expensesRouter,
+  financeRouter,
+  incomeRouter,
+  loansRouter,
+  paymentsRouter,
+  payrollRouter,
+  salaryRouter,
+} from "./modules/finance/finance.routes.js";
 import questionBankRoutes from "./modules/exams/questionBank.routes.js";
 import examsRoutes from "./modules/exams/exams.routes.js";
 import studentExamsRoutes from "./modules/exams/studentExams.routes.js";
@@ -137,6 +148,15 @@ app.use("/api/analytics", analyticsRoutes);
 app.use("/api/backup", backupRoutes);
 app.use("/api/faculties", facultyRoutes);
 app.use("/api/staff", staffRoutes);
+app.use("/api/finance", financeRouter);
+app.use("/api/accounting", accountingRouter);
+app.use("/api/expenses", expensesRouter);
+app.use("/api/income", incomeRouter);
+app.use("/api/salary-structures", salaryRouter);
+app.use("/api/employee-advances", advancesRouter);
+app.use("/api/employee-loans", loansRouter);
+app.use("/api/payroll", payrollRouter);
+app.use("/api/payments", paymentsRouter);
 app.use("/api/question-bank", questionBankRoutes);
 app.use("/api/exams", examsRoutes);
 app.use("/api/student/exams", studentExamsRoutes);

@@ -56,7 +56,6 @@ const semesterFeeSchema = new mongoose.Schema(
     tuition: { type: Number, default: 0 },
     registration: { type: Number, default: 0 },
     exam: { type: Number, default: 0 },
-    other: { type: Number, default: 0 },
     total: { type: Number, default: 0 },
   },
   { _id: false }
@@ -68,7 +67,6 @@ const feesSchema = new mongoose.Schema(
     registration: { type: String, trim: true, default: "" },
     exam: { type: String, trim: true, default: "" },
     tuition: { type: String, trim: true, default: "" },
-    other: { type: String, trim: true, default: "" },
     installmentAllowed: { type: Boolean, default: true },
     installments: { type: [installmentSchema], default: [] },
     semesterFees: { type: [semesterFeeSchema], default: [] },
