@@ -8,22 +8,32 @@ const router = Router();
 
 router.use(requireStudentJwt);
 
+function notificationQuery(req) {
+  const email = String(req.student?.email || "")
+    .toLowerCase()
+    .trim();
+  const sub = String(req.student?.sub || "");
+  const userId = sub.startsWith("student:") ? sub.slice("student:".length) : "";
+  const or = [];
+  if (email) or.push({ email });
+  if (userId && mongoose.isValidObjectId(userId)) or.push({ userId });
+  return or.length ? { $or: or } : null;
+}
+
 /**
  * GET /api/students/notifications
  */
 router.get("/", async (req, res) => {
   try {
-    const email = String(req.student?.email || "")
-      .toLowerCase()
-      .trim();
-    if (!email) {
+    const filter = notificationQuery(req);
+    if (!filter) {
       return res
         .status(401)
         .json({ success: false, message: "Invalid student session" });
     }
 
     const limit = Math.min(100, Math.max(1, Number(req.query.limit) || 50));
-    const rows = await Notification.find({ email })
+    const rows = await Notification.find(filter)
       .sort({ createdAt: -1 })
       .limit(limit)
       .lean();
@@ -49,17 +59,15 @@ router.get("/", async (req, res) => {
  */
 router.get("/unread-count", async (req, res) => {
   try {
-    const email = String(req.student?.email || "")
-      .toLowerCase()
-      .trim();
-    if (!email) {
+    const filter = notificationQuery(req);
+    if (!filter) {
       return res
         .status(401)
         .json({ success: false, message: "Invalid student session" });
     }
 
     const unreadCount = await Notification.countDocuments({
-      email,
+      ...filter,
       read: false,
     });
 
@@ -77,17 +85,15 @@ router.get("/unread-count", async (req, res) => {
  */
 router.patch("/mark-all-read", async (req, res) => {
   try {
-    const email = String(req.student?.email || "")
-      .toLowerCase()
-      .trim();
-    if (!email) {
+    const filter = notificationQuery(req);
+    if (!filter) {
       return res
         .status(401)
         .json({ success: false, message: "Invalid student session" });
     }
 
     await Notification.updateMany(
-      { email, read: false },
+      { ...filter, read: false },
       { $set: { read: true } }
     );
 
@@ -105,10 +111,13 @@ router.patch("/mark-all-read", async (req, res) => {
  */
 router.patch("/:id/read", async (req, res) => {
   try {
-    const email = String(req.student?.email || "")
-      .toLowerCase()
-      .trim();
+    const filter = notificationQuery(req);
     const { id } = req.params;
+    if (!filter) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid student session" });
+    }
     if (!mongoose.isValidObjectId(id)) {
       return res
         .status(400)
@@ -116,7 +125,7 @@ router.patch("/:id/read", async (req, res) => {
     }
 
     const updated = await Notification.findOneAndUpdate(
-      { _id: id, email },
+      { _id: id, ...filter },
       { $set: { read: true } },
       { new: true }
     ).lean();

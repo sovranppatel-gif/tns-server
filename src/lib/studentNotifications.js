@@ -36,6 +36,7 @@ function formatRelativeTime(date) {
 
 export async function createStudentNotification({
   email,
+  userId = null,
   title,
   body = "",
   type = "general",
@@ -46,16 +47,20 @@ export async function createStudentNotification({
     .trim();
   if (!normalizedEmail || !title) return null;
 
-  const user = await User.findOne({
-    type: USER_TYPES.STUDENT,
-    email: normalizedEmail,
-  })
-    .select("_id email")
-    .lean();
+  let resolvedUserId = userId || null;
+  if (!resolvedUserId) {
+    const found = await User.findOne({
+      type: USER_TYPES.STUDENT,
+      email: normalizedEmail,
+    })
+      .select("_id email")
+      .lean();
+    resolvedUserId = found?._id || null;
+  }
 
   const doc = await Notification.create({
     email: normalizedEmail,
-    userId: user?._id || null,
+    userId: resolvedUserId,
     title: String(title).trim(),
     body: String(body || "").trim(),
     type: String(type || "general").trim(),
@@ -67,8 +72,8 @@ export async function createStudentNotification({
   const io = getIO();
   if (io) {
     io.to(`student:${normalizedEmail}`).emit("notification:new", payload);
-    if (user?._id) {
-      io.to(`student:${user._id.toString()}`).emit("notification:new", payload);
+    if (resolvedUserId) {
+      io.to(`student:${String(resolvedUserId)}`).emit("notification:new", payload);
     }
   }
 
@@ -182,6 +187,73 @@ export async function notifyFeePaymentApproved(feeDoc, payment) {
       amount: Number(payment.amount) || 0,
     },
   });
+}
+
+/**
+ * Notify student when admin approves or rejects a profile change request.
+ */
+export async function notifyProfileChangeReviewed({
+  user,
+  previousEmail,
+  status,
+  adminNote = "",
+}) {
+  if (!user) return null;
+  const currentEmail = String(user.email || "")
+    .toLowerCase()
+    .trim();
+  const oldEmail = String(previousEmail || "")
+    .toLowerCase()
+    .trim();
+  const notifyEmail = oldEmail || currentEmail;
+  if (!notifyEmail) return null;
+
+  const approved = status === "Approved";
+  const payload = await createStudentNotification({
+    email: notifyEmail,
+    userId: user._id,
+    type: "profile",
+    title: approved ? "Profile update approved" : "Profile update not approved",
+    body: approved
+      ? "Admin has approved your personal details. Your profile is now updated."
+      : adminNote
+        ? `Your profile change was not approved. ${adminNote}`
+        : "Admin did not approve your profile change request.",
+    meta: {
+      status,
+      userId: String(user._id),
+      requestType: "profile-change",
+    },
+  });
+
+  const io = getIO();
+  if (io) {
+    const live = {
+      status,
+      userId: String(user._id),
+      notificationId: payload?.id || "",
+    };
+    const rooms = new Set(
+      [
+        currentEmail ? `student:${currentEmail}` : "",
+        oldEmail ? `student:${oldEmail}` : "",
+        user._id ? `student:${String(user._id)}` : "",
+      ].filter(Boolean)
+    );
+    for (const room of rooms) {
+      io.to(room).emit("profile:updated", live);
+      if (
+        payload &&
+        oldEmail &&
+        oldEmail !== currentEmail &&
+        room === `student:${oldEmail}`
+      ) {
+        io.to(room).emit("notification:new", payload);
+      }
+    }
+  }
+
+  return payload;
 }
 
 export { toPublicNotification, formatRelativeTime };

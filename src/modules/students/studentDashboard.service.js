@@ -114,27 +114,30 @@ export async function getStudentDashboard(reqStudent) {
     throw err;
   }
 
-  const rawUser = await loadStudentUser(email);
+  const rawUser = await loadStudentUser(email, reqStudent?.sub);
   if (!rawUser || rawUser.isActive === false) {
     const err = new Error("Account not found");
     err.status = 401;
     throw err;
   }
 
+  const lookupEmail = String(rawUser.email || email)
+    .toLowerCase()
+    .trim();
   const profile = toPublicStudent(rawUser);
   const [attendance, fees, admissions] = await Promise.all([
     raceMs(
-      () => attendanceSummary(email),
+      () => attendanceSummary(lookupEmail),
       2800,
       { attendancePercent: 0, presentDays: 0, absentDays: 0, lateDays: 0 }
     ),
-    raceMs(() => feeSummary(email), 2800, {
+    raceMs(() => feeSummary(lookupEmail), 2800, {
       details: [],
       stats: { pendingRaw: 0, collectedRaw: 0 },
     }),
     raceMs(
       () =>
-        Admission.find({ email, status: "Approved" })
+        Admission.find({ email: lookupEmail, status: "Approved" })
           .select("course studentStatus")
           .sort({ admissionDate: -1 })
           .limit(6)

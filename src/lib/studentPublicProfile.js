@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { User, USER_TYPES } from "../models/User.js";
 import { Student } from "../modules/students/students.model.js";
 
@@ -134,7 +135,24 @@ export async function enrichPublicStudent(publicUser, { email, user } = {}) {
   return { user: next, erp };
 }
 
-export async function loadStudentUser(email) {
+export async function loadStudentUser(email, sub) {
+  const select =
+    "_id email name phone promoCode heardAbout heardAboutOther emailVerified phoneVerified mustResetPassword type isActive profile erpStudentId";
+  const id = String(sub || "").startsWith("student:")
+    ? String(sub).slice("student:".length)
+    : "";
+  if (
+    id &&
+    mongoose.Types.ObjectId.isValid(id) &&
+    String(new mongoose.Types.ObjectId(id)) === String(id)
+  ) {
+    const byId = await User.findOne({ _id: id, type: USER_TYPES.STUDENT })
+      .select(select)
+      .lean()
+      .maxTimeMS(5000);
+    if (byId) return byId;
+  }
+
   const normalized = String(email || "")
     .toLowerCase()
     .trim();
@@ -143,9 +161,7 @@ export async function loadStudentUser(email) {
     type: USER_TYPES.STUDENT,
     email: normalized,
   })
-    .select(
-      "_id email name phone promoCode heardAbout heardAboutOther emailVerified phoneVerified mustResetPassword type isActive profile erpStudentId"
-    )
+    .select(select)
     .lean()
     .maxTimeMS(5000);
 }

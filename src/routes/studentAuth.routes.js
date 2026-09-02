@@ -24,10 +24,20 @@ import {
   resolveStudentAccount,
 } from "../lib/erpStudentAccount.js";
 import {
-  avatarFromName,
   enrichPublicStudent,
   toPublicStudent,
 } from "../lib/studentPublicProfile.js";
+import { studentAvatarUpload } from "../modules/students/profilePhoto.upload.js";
+import {
+  assertPersonalUnique,
+  findStudentUserFromJwt,
+  getPendingForUser,
+  sanitizeProposed,
+  snapshotFromUser,
+  toPublicChange,
+  upsertPendingRequest,
+  validateProposed,
+} from "../modules/students/profileChange.service.js";
 
 const router = Router();
 
@@ -35,82 +45,6 @@ const DUMMY_HASH = bcrypt.hashSync(
   `__never_matches_${Date.now()}_${Math.random()}`,
   10
 );
-
-const emptyAddress = () => ({
-  line1: "",
-  line2: "",
-  city: "",
-  state: "",
-  pincode: "",
-});
-const emptyParent = () => ({
-  name: "",
-  relation: "",
-  phone: "",
-  email: "",
-});
-const emptyEmergency = () => ({
-  name: "",
-  relation: "",
-  phone: "",
-});
-
-function pickTrimmed(value, max = 200) {
-  return String(value ?? "")
-    .trim()
-    .slice(0, max);
-}
-
-function normalizeAddress(raw) {
-  const src = raw && typeof raw === "object" ? raw : {};
-  return {
-    line1: pickTrimmed(src.line1, 200),
-    line2: pickTrimmed(src.line2, 200),
-    city: pickTrimmed(src.city, 100),
-    state: pickTrimmed(src.state, 100),
-    pincode: pickTrimmed(src.pincode, 12),
-  };
-}
-
-function normalizeParent(raw) {
-  const src = raw && typeof raw === "object" ? raw : {};
-  return {
-    name: pickTrimmed(src.name, 100),
-    relation: pickTrimmed(src.relation, 50),
-    phone: pickTrimmed(src.phone, 20),
-    email: pickTrimmed(src.email, 200).toLowerCase(),
-  };
-}
-
-function normalizeEmergency(raw) {
-  const src = raw && typeof raw === "object" ? raw : {};
-  return {
-    name: pickTrimmed(src.name, 100),
-    relation: pickTrimmed(src.relation, 50),
-    phone: pickTrimmed(src.phone, 20),
-  };
-}
-
-function normalizeEducation(raw) {
-  if (!Array.isArray(raw)) return [];
-  return raw
-    .slice(0, 10)
-    .map((e) => ({
-      level: pickTrimmed(e?.level, 80),
-      institute: pickTrimmed(e?.institute, 150),
-      year: pickTrimmed(e?.year, 20),
-      percentage: pickTrimmed(e?.percentage, 20),
-    }))
-    .filter((e) => e.level || e.institute);
-}
-
-function normalizeStringList(raw, maxItems = 30, maxLen = 80) {
-  if (!Array.isArray(raw)) return [];
-  return raw
-    .map((s) => pickTrimmed(s, maxLen))
-    .filter(Boolean)
-    .slice(0, maxItems);
-}
 
 /**
  * POST /api/students/auth/send-otp
@@ -490,6 +424,7 @@ router.post("/login", async (req, res) => {
   try {
     const identifier = readIdentifier(req.body);
     const password = String(req.body?.password || "");
+    console.log(`[student-auth] login attempt identifier="${identifier}"`);
 
     if (!identifier || !password) {
       return res.status(400).json({
@@ -516,6 +451,7 @@ router.post("/login", async (req, res) => {
 
     if (!user || !user.isActive || !ok) {
       if (user?.isActive && user.mustResetPassword) {
+        console.log(`[student-auth] login blocked mustResetPassword identifier="${identifier}"`);
         return res.status(403).json({
           success: false,
           mustResetPassword: true,
@@ -523,6 +459,7 @@ router.post("/login", async (req, res) => {
             "Password is not set yet. Use Forgot password — OTP will be sent to your registered email.",
         });
       }
+      console.log(`[student-auth] login failed identifier="${identifier}"`);
       return res.status(401).json({
         success: false,
         message: "Invalid email/mobile or password",
@@ -540,6 +477,7 @@ router.post("/login", async (req, res) => {
       (e) => console.error("student lastLoginAt update failed:", e)
     );
 
+    console.log(`[student-auth] login ok identifier="${identifier}"`);
     return res.json({
       success: true,
       token,
@@ -563,12 +501,7 @@ router.post("/login", async (req, res) => {
  */
 router.get("/me", requireStudentJwt, async (req, res) => {
   try {
-    const user = await User.findOne({
-      type: USER_TYPES.STUDENT,
-      email: req.student.email,
-    }).select(
-      "_id email name phone promoCode heardAbout heardAboutOther emailVerified phoneVerified mustResetPassword type isActive profile erpStudentId"
-    );
+    const user = await findStudentUserFromJwt(req);
 
     if (!user || !user.isActive) {
       return res
@@ -576,14 +509,26 @@ router.get("/me", requireStudentJwt, async (req, res) => {
         .json({ success: false, message: "Account not found" });
     }
 
-    const { user: publicUser } = await enrichPublicStudent(toPublicStudent(user), {
+    const [{ user: publicUser }, pendingProfileChange] = await Promise.all([
+      enrichPublicStudent(toPublicStudent(user), {
+        email: user.email,
+        user,
+      }),
+      getPendingForUser(user),
+    ]);
+
+    const token = signStudentToken({
+      sub: `student:${user._id.toString()}`,
       email: user.email,
-      user,
+      name: user.name || "Student",
+      phone: user.phone,
     });
 
     return res.json({
       success: true,
       user: publicUser,
+      pendingProfileChange,
+      token,
     });
   } catch (err) {
     console.error("student /me error:", err);
@@ -612,10 +557,13 @@ router.post("/change-password", requireStudentJwt, async (req, res) => {
       });
     }
 
-    const user = await User.findOne({
-      type: USER_TYPES.STUDENT,
-      email: req.student.email,
-    });
+    const found = await findStudentUserFromJwt(req);
+    if (!found || !found.isActive) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Account not found" });
+    }
+    const user = await User.findById(found._id);
     if (!user || !user.isActive) {
       return res
         .status(401)
@@ -645,16 +593,58 @@ router.post("/change-password", requireStudentJwt, async (req, res) => {
 });
 
 /**
+ * POST /api/students/auth/avatar
+ * multipart field: file
+ */
+router.post("/avatar", requireStudentJwt, (req, res, next) => {
+  studentAvatarUpload.single("file")(req, res, (err) => {
+    if (err) {
+      const isSize =
+        err.code === "LIMIT_FILE_SIZE" ||
+        /File too large/i.test(String(err.message || ""));
+      return res.status(400).json({
+        success: false,
+        message: isSize
+          ? "Photo must be 2 MB or smaller"
+          : err.message || "Upload failed",
+      });
+    }
+    next();
+  });
+}, async (req, res) => {
+  try {
+    const user = await findStudentUserFromJwt(req);
+    if (!user || !user.isActive) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Account not found" });
+    }
+    if (!req.file?.filename) {
+      return res.status(400).json({ success: false, message: "No photo received" });
+    }
+    return res.status(201).json({
+      success: true,
+      message: "Photo uploaded",
+      data: {
+        url: `/uploads/students/avatars/${req.file.filename}`,
+        name: req.file.originalname || req.file.filename,
+        size: req.file.size,
+        mimeType: req.file.mimetype,
+      },
+    });
+  } catch (err) {
+    console.error("student avatar upload error:", err);
+    return res.status(500).json({ success: false, message: "Upload failed" });
+  }
+});
+
+/**
  * PATCH /api/students/auth/me
- * Authorization: Bearer <student JWT>
- * Body: editable profile fields (email is not changeable here)
+ * Submits a personal-details change request. Profile updates only after admin approval.
  */
 router.patch("/me", requireStudentJwt, async (req, res) => {
   try {
-    const user = await User.findOne({
-      type: USER_TYPES.STUDENT,
-      email: req.student.email,
-    });
+    const user = await findStudentUserFromJwt(req);
 
     if (!user || !user.isActive) {
       return res
@@ -663,127 +653,42 @@ router.patch("/me", requireStudentJwt, async (req, res) => {
     }
 
     const body = req.body && typeof req.body === "object" ? req.body : {};
-    const updates = {};
-
-    if (body.name !== undefined) {
-      const name = pickTrimmed(body.name, 100);
-      if (!name) {
-        return res
-          .status(400)
-          .json({ success: false, message: "Name is required" });
-      }
-      updates.name = name;
+    const current = snapshotFromUser(user);
+    const proposed = sanitizeProposed(body, current);
+    const invalid = validateProposed(proposed);
+    if (invalid) {
+      return res.status(400).json({ success: false, message: invalid });
     }
 
-    if (body.mobile !== undefined || body.phone !== undefined) {
-      const rawMobile =
-        body.mobile !== undefined ? body.mobile : body.phone;
-      const mobile = String(rawMobile || "")
-        .replace(/\D/g, "")
-        .slice(-10);
-      if (!isValidMobile(mobile)) {
-        return res.status(400).json({
-          success: false,
-          message: "Enter a valid 10-digit Indian mobile number",
-        });
-      }
-      const phone = `91${mobile}`;
-      if (phone !== user.phone) {
-        const existingPhone = await User.findOne({
-          type: USER_TYPES.STUDENT,
-          phone,
-          _id: { $ne: user._id },
-        });
-        if (existingPhone) {
-          return res.status(409).json({
-            success: false,
-            message: "An account with this mobile number already exists",
-          });
-        }
-        updates.phone = phone;
-        updates.phoneVerified = false;
-      }
-    }
-
-    const profile = {
-      ...(user.profile?.toObject?.() || user.profile || {}),
-    };
-
-    const profileKeys = [
-      "dob",
-      "gender",
-      "bloodGroup",
-      "avatar",
-      "batch",
-      "course",
-      "semester",
-      "rollNo",
-      "enrollmentDate",
-      "trainer",
-      "trainerEmail",
-    ];
-    for (const key of profileKeys) {
-      if (body[key] !== undefined) {
-        profile[key] = pickTrimmed(body[key], key === "avatar" ? 500 : 150);
-      }
-    }
-
-    if (body.address !== undefined) {
-      profile.address = normalizeAddress(body.address);
-    }
-    if (body.parent !== undefined) {
-      profile.parent = normalizeParent(body.parent);
-    }
-    if (body.emergency !== undefined) {
-      profile.emergency = normalizeEmergency(body.emergency);
-    }
-    if (body.education !== undefined) {
-      profile.education = normalizeEducation(body.education);
-    }
-    if (body.skills !== undefined) {
-      profile.skills = normalizeStringList(body.skills);
-    }
-    if (body.achievements !== undefined) {
-      profile.achievements = normalizeStringList(body.achievements, 20, 150);
-    }
-
-    // Keep avatar in sync with name when avatar was auto-generated / empty
-    const nextName = updates.name || user.name || "Student";
-    if (!profile.avatar || String(profile.avatar).includes("ui-avatars.com")) {
-      profile.avatar = avatarFromName(nextName);
-    }
-
-    updates.profile = profile;
-
-    Object.assign(user, updates);
-    user.markModified("profile");
-    await user.save();
-
-    const publicUser = toPublicStudent(user);
-    const token = signStudentToken({
-      sub: `student:${user._id.toString()}`,
+    await assertPersonalUnique(user, proposed);
+    const entry = await upsertPendingRequest(user, proposed);
+    const { user: publicUser } = await enrichPublicStudent(toPublicStudent(user), {
       email: user.email,
-      name: user.name || "Student",
-      phone: user.phone,
+      user,
     });
 
     return res.json({
       success: true,
-      message: "Profile updated",
-      token,
+      pending: true,
+      message:
+        "Profile change submitted. It will update after admin approval.",
+      pendingProfileChange: toPublicChange(entry),
       user: publicUser,
     });
   } catch (err) {
+    if (err.status) {
+      return res.status(err.status).json({ success: false, message: err.message });
+    }
     if (err?.code === 11000) {
       return res.status(409).json({
         success: false,
-        message: "An account with this mobile number already exists",
+        message: "An account with this email or mobile already exists",
       });
     }
     console.error("student patch /me error:", err);
     return res
       .status(500)
-      .json({ success: false, message: "Failed to update profile" });
+      .json({ success: false, message: "Failed to submit profile request" });
   }
 });
 

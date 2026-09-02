@@ -13,6 +13,11 @@ import {
   assignStudentBatchController,
   syncStudentsController,
 } from "./students.controller.js";
+import {
+  approveProfileChangeController,
+  listProfileChangesController,
+  rejectProfileChangeController,
+} from "./profileChange.controller.js";
 
 const router = Router();
 
@@ -21,6 +26,9 @@ router.use(requireMasterAdminJwt);
 router.get("/", getStudentsController);
 router.get("/stats", getStudentStatsController);
 router.get("/meta", getStudentMetaController);
+router.get("/profile-changes", listProfileChangesController);
+router.post("/profile-changes/:id/approve", approveProfileChangeController);
+router.post("/profile-changes/:id/reject", rejectProfileChangeController);
 router.post("/sync-from-admissions", syncStudentsController);
 router.post("/from-admission", createFromAdmissionController);
 router.post("/", createStudentController);
