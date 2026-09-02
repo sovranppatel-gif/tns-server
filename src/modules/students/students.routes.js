@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { requireMasterAdminJwt } from "../../middleware/requireMasterAdminJwt.js";
 import { educationDocumentUpload } from "../admissions/admissions.upload.js";
+import { studentAvatarUpload } from "./profilePhoto.upload.js";
 import {
   getStudentsController,
   getStudentController,
@@ -32,6 +33,37 @@ router.post("/profile-changes/:id/reject", rejectProfileChangeController);
 router.post("/sync-from-admissions", syncStudentsController);
 router.post("/from-admission", createFromAdmissionController);
 router.post("/", createStudentController);
+
+router.post("/upload-photo", (req, res, next) => {
+  studentAvatarUpload.single("file")(req, res, (err) => {
+    if (err) {
+      const isSize =
+        err.code === "LIMIT_FILE_SIZE" ||
+        /File too large/i.test(String(err.message || ""));
+      return res.status(400).json({
+        success: false,
+        message: isSize
+          ? "Photo must be 2 MB or smaller"
+          : err.message || "Upload failed",
+      });
+    }
+    next();
+  });
+}, (req, res) => {
+  if (!req.file?.filename) {
+    return res.status(400).json({ success: false, message: "No photo file received" });
+  }
+  return res.status(201).json({
+    success: true,
+    message: "Photo uploaded",
+    data: {
+      url: `/uploads/students/avatars/${req.file.filename}`,
+      name: req.file.originalname || req.file.filename,
+      size: req.file.size,
+      mimeType: req.file.mimetype,
+    },
+  });
+});
 
 router.post("/upload-document", (req, res, next) => {
   educationDocumentUpload.single("file")(req, res, (err) => {

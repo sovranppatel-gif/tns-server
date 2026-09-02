@@ -245,6 +245,9 @@ export async function upsertPendingRequest(user, proposed) {
 }
 
 export async function applyProposed(user, proposed) {
+  const previousEmail = String(user.email || '').toLowerCase();
+  const previousPhone = String(user.phone || '');
+  const linkedStudentId = user.erpStudentId;
   user.name = proposed.name;
   if (proposed.email !== String(user.email || "").toLowerCase()) {
     user.email = proposed.email;
@@ -273,46 +276,50 @@ export async function applyProposed(user, proposed) {
   user.markModified("profile");
   await user.save();
 
-  if (user.erpStudentId) {
-    const erp = await Student.findById(user.erpStudentId);
-    if (erp) {
-      erp.nameEnglish = proposed.name;
-      erp.dateOfBirth = proposed.dob || erp.dateOfBirth;
-      erp.gender = proposed.gender || erp.gender;
-      erp.contact = {
-        ...(erp.contact?.toObject?.() || erp.contact || {}),
-        email: proposed.email,
-        mobile: proposed.mobile,
-      };
-      if (proposed.avatar && String(proposed.avatar).startsWith("/uploads/")) {
-        erp.photo = proposed.avatar;
-      }
-      if (proposed.parent?.name) {
-        erp.guardian = {
-          ...(erp.guardian?.toObject?.() || erp.guardian || {}),
-          name: proposed.parent.name,
-          relation: proposed.parent.relation,
-          mobile: proposed.parent.phone,
-        };
-      }
-      const addr = proposed.address || {};
-      const line = [addr.line1, addr.line2].filter(Boolean).join(", ");
-      if (line || addr.city || addr.state || addr.pincode) {
-        erp.address = {
-          ...(erp.address?.toObject?.() || erp.address || {}),
-          permanent: line || erp.address?.permanent || "",
-          correspondence: line || erp.address?.correspondence || "",
-          district: addr.city || erp.address?.district || "",
-          state: addr.state || erp.address?.state || "",
-          pinCode: addr.pincode || erp.address?.pinCode || "",
-        };
-      }
-      erp.updatedBy = "profile-change-approval";
-      erp.markModified("contact");
-      erp.markModified("guardian");
-      erp.markModified("address");
-      await erp.save();
+  const erpQuery = [];
+  if (linkedStudentId) erpQuery.push({ _id: linkedStudentId });
+  if (previousEmail) erpQuery.push({ 'contact.email': previousEmail });
+  if (previousPhone) {
+    const mobile = previousPhone.replace(/^91/, '');
+    if (mobile) erpQuery.push({ 'contact.mobile': mobile });
+  }
+  const erp = erpQuery.length ? await Student.findOne({ $or: erpQuery }) : null;
+  if (erp) {
+    erp.nameEnglish = proposed.name;
+    erp.dateOfBirth = proposed.dob || erp.dateOfBirth;
+    erp.gender = proposed.gender || erp.gender;
+    erp.contact = {
+      ...(erp.contact?.toObject?.() || erp.contact || {}),
+      email: proposed.email,
+      mobile: proposed.mobile,
+    };
+    if (proposed.avatar && !String(proposed.avatar).includes("ui-avatars.com")) {
+      erp.photo = proposed.avatar;
     }
+    if (proposed.parent?.name) {
+      erp.guardian = {
+        ...(erp.guardian?.toObject?.() || erp.guardian || {}),
+        name: proposed.parent.name,
+        relation: proposed.parent.relation,
+        mobile: proposed.parent.phone,
+      };
+    }
+    const addr = proposed.address || {};
+    const line = [addr.line1, addr.line2].filter(Boolean).join(", ");
+    if (line || addr.city || addr.state || addr.pincode) {
+      erp.address = {
+        ...(erp.address?.toObject?.() || erp.address || {}),
+        permanent: line || erp.address?.permanent || "",
+        correspondence: line || erp.address?.correspondence || "",
+        district: addr.city || erp.address?.district || "",
+        state: addr.state || erp.address?.state || "",
+        pinCode: addr.pincode || erp.address?.pinCode || "",
+      };
+    }
+    if (!user.erpStudentId) user.erpStudentId = erp._id;
+    erp.updatedBy = "profile-change-approval";
+    await erp.save();
+    if (user.isModified('erpStudentId')) await user.save();
   }
 
   return user;

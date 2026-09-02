@@ -48,6 +48,7 @@ import {
 import questionBankRoutes from "./modules/exams/questionBank.routes.js";
 import examsRoutes from "./modules/exams/exams.routes.js";
 import studentExamsRoutes from "./modules/exams/studentExams.routes.js";
+import assignmentsRoutes from "./modules/assignments/assignments.routes.js";
 import { activityLogger } from "./middleware/activityLogger.js";
 import { requireDbReady } from "./middleware/requireDbReady.js";
 import { initSocket } from "./lib/socket.js";
@@ -160,6 +161,7 @@ app.use("/api/payments", paymentsRouter);
 app.use("/api/question-bank", questionBankRoutes);
 app.use("/api/exams", examsRoutes);
 app.use("/api/student/exams", studentExamsRoutes);
+app.use("/api/assignments", assignmentsRoutes);
 
 app.use((req, res) => {
   res.status(404).json({

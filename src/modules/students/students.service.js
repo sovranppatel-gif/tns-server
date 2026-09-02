@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { Student, STUDENT_STATUSES } from "./students.model.js";
+import { User, USER_TYPES } from "../../models/User.js";
 import { Admission } from "../../models/Admission.js";
 import { University } from "../universities/universities.model.js";
 import { Course } from "../courses/courses.model.js";
@@ -15,7 +16,7 @@ import { normalizeStudentPayload } from "./students.validation.js";
 
 const GST_INSTITUTE_ID = "institute-gst";
 const LIST_SELECT =
-  "studentId admissionId admissionMongoId universityId courseId batchId session currentTerm universityName universityShortName courseName courseCode courseCategory batchName nameEnglish nameHindi fatherName gender category contact status admissionDate createdAt updatedAt";
+  "studentId admissionId admissionMongoId universityId courseId batchId session currentTerm universityName universityShortName courseName courseCode courseCategory batchName nameEnglish nameHindi fatherName gender category contact photo status admissionDate createdAt updatedAt";
 
 function httpError(message, status = 400) {
   const err = new Error(message);
@@ -31,6 +32,52 @@ function asObjectId(value) {
   if (!raw || raw === GST_INSTITUTE_ID) return null;
   if (!/^[a-fA-F0-9]{24}$/.test(raw)) return null;
   return new mongoose.Types.ObjectId(raw);
+}
+
+async function reconcileApprovedPortalProfile(doc) {
+  const email = String(doc.contact?.email || "").toLowerCase();
+  const mobile = String(doc.contact?.mobile || "").replace(/\D/g, "");
+  const or = [{ erpStudentId: doc._id }];
+  if (email) or.push({ type: USER_TYPES.STUDENT, email });
+  if (mobile) or.push({ type: USER_TYPES.STUDENT, phone: `91${mobile}` });
+  const user = await User.findOne({ $or: or }).select("profile name email phone erpStudentId").lean();
+  if (!user?.profile) return doc;
+
+  const profile = user.profile;
+  const avatar = String(profile.avatar || "");
+  if (avatar && !avatar.includes("ui-avatars.com")) doc.photo = avatar;
+  if (user.name) doc.nameEnglish = user.name;
+  if (profile.dob) doc.dateOfBirth = profile.dob;
+  if (profile.gender) doc.gender = profile.gender;
+  doc.contact = {
+    ...(doc.contact?.toObject?.() || doc.contact || {}),
+    email: user.email || email,
+    mobile: String(user.phone || "").replace(/^91/, "") || mobile,
+  };
+  if (profile.parent) {
+    doc.guardian = {
+      ...(doc.guardian?.toObject?.() || doc.guardian || {}),
+      name: profile.parent.name || doc.guardian?.name || "",
+      relation: profile.parent.relation || doc.guardian?.relation || "",
+      mobile: profile.parent.phone || doc.guardian?.mobile || "",
+    };
+  }
+  if (profile.address) {
+    const line = [profile.address.line1, profile.address.line2].filter(Boolean).join(", ");
+    doc.address = {
+      ...(doc.address?.toObject?.() || doc.address || {}),
+      permanent: line || doc.address?.permanent || "",
+      correspondence: line || doc.address?.correspondence || "",
+      district: profile.address.city || doc.address?.district || "",
+      state: profile.address.state || doc.address?.state || "",
+      pinCode: profile.address.pincode || doc.address?.pinCode || "",
+    };
+  }
+  if (!user.erpStudentId) {
+    await User.updateOne({ _id: user._id }, { $set: { erpStudentId: doc._id } });
+  }
+  await doc.save();
+  return doc;
 }
 
 function idStr(value) {
@@ -208,6 +255,7 @@ function toDetailRow(doc, extras = {}) {
     address: d.address || {},
     guardian: d.guardian || {},
     education: Array.isArray(d.education) ? d.education : [],
+    admissionDetails: d.admissionDetails || {},
     documents: Array.isArray(d.documents) ? d.documents : [],
     batchHistory: (Array.isArray(d.batchHistory) ? d.batchHistory : []).map((row) => ({
       ...row,
@@ -640,6 +688,16 @@ function studentFromAdmission(admission) {
     photo: d.photoPreview || d.photo,
     admissionDate: admission.admissionDate,
     status: "Active",
+    admissionDetails: {
+      registrationNo: d.registrationNo || admission.admissionId || "",
+      officeRegistrationNo: d.officeRegistrationNo || "",
+      totalFee: d.totalFee || admission.fee || "",
+      institutionName: d.institutionName || "",
+      officeDate: d.officeDate || "",
+      applicantDate: d.applicantDate || "",
+      mode: admission.mode || "",
+      counsellor: admission.counsellor || "",
+    },
   });
 }
 
@@ -881,6 +939,8 @@ export async function getStudentById(id, { includeSummaries = true } = {}) {
     .maxTimeMS(10000);
 
   if (!doc) return null;
+
+  await reconcileApprovedPortalProfile(doc);
 
   const lean = doc.toObject();
   const course = lean.courseId && typeof lean.courseId === "object" ? lean.courseId : null;
@@ -1302,6 +1362,7 @@ export async function updateStudent(id, payload = {}, editor = "master-admin") {
   if (payload.address) doc.address = { ...(doc.address?.toObject?.() || doc.address || {}), ...payload.address };
   if (payload.guardian) doc.guardian = { ...(doc.guardian?.toObject?.() || doc.guardian || {}), ...payload.guardian };
   if (payload.education) doc.education = payload.education;
+  if (payload.admissionDetails) doc.admissionDetails = payload.admissionDetails;
   if (payload.documents) doc.documents = payload.documents;
   if (payload.admissionDate) doc.admissionDate = payload.admissionDate;
 

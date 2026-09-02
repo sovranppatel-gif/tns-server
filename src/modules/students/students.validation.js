@@ -169,6 +169,9 @@ export function normalizeStudentPayload(raw = {}) {
   if (hasGuardian) payload.guardian = normalizeGuardian(raw);
 
   if (Array.isArray(raw.education)) payload.education = raw.education;
+  if (raw.admissionDetails && typeof raw.admissionDetails === "object") {
+    payload.admissionDetails = raw.admissionDetails;
+  }
   if (hasKey(raw, "photo") || hasKey(raw, "photoPreview")) {
     payload.photo = typeof raw.photo === "string" ? raw.photo : str(raw.photoPreview);
   }

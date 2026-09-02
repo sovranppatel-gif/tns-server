@@ -167,6 +167,7 @@ const studentSchema = new mongoose.Schema(
     address: { type: addressSchema, default: () => ({}) },
     guardian: { type: guardianSchema, default: () => ({}) },
     education: { type: [mongoose.Schema.Types.Mixed], default: [] },
+    admissionDetails: { type: mongoose.Schema.Types.Mixed, default: {} },
 
     photo: { type: String, default: "" },
     documents: { type: [documentSchema], default: [] },
