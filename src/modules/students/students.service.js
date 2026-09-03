@@ -926,7 +926,13 @@ export async function getStudentMeta() {
 export async function getStudentById(id, { includeSummaries = true } = {}) {
   const oid = asObjectId(id);
   const query = oid
-    ? { $or: [{ _id: oid }, { studentId: String(id).trim() }] }
+    ? {
+        $or: [
+          { _id: oid },
+          { admissionMongoId: oid },
+          { studentId: String(id).trim() },
+        ],
+      }
     : { studentId: String(id || "").trim() };
 
   const doc = await Student.findOne(query)

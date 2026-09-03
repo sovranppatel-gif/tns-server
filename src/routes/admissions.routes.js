@@ -17,6 +17,9 @@ import { upsertFeeFromAdmission } from "../modules/fees/fees.service.js";
 import { ensureStudentFromAdmission } from "../modules/students/students.service.js";
 import { University } from "../modules/universities/universities.model.js";
 import { Course } from "../modules/courses/courses.model.js";
+import { Student } from "../modules/students/students.model.js";
+import { admissionsImportUpload } from "../modules/admissions/admissions-import.upload.js";
+import { executeAdmissionEnrichment } from "../modules/admissions/admissionEnrichment.service.js";
 
 const router = Router();
 
@@ -624,7 +627,46 @@ function slimDetails(details) {
   return out;
 }
 
-function toRow(doc) {
+function compactPhoto(photo) {
+  const value = String(photo || "").trim();
+  if (!value) return "";
+  return value.startsWith("data:") ? "" : value;
+}
+
+function studentMatchQuery(rows) {
+  const ids = rows.flatMap((row) => [row.studentMongoId, row.details?.studentMongoId]).filter((value) => mongoose.isValidObjectId(value));
+  const admissionIds = rows.map((row) => row._id).filter((value) => mongoose.isValidObjectId(value));
+  const admissionNumbers = rows.map((row) => row.admissionId).filter(Boolean);
+  const emails = rows.map((row) => String(row.email || "").toLowerCase()).filter(Boolean);
+  const or = [];
+  if (ids.length) or.push({ _id: { $in: ids } });
+  if (admissionIds.length) or.push({ admissionMongoId: { $in: admissionIds } });
+  if (admissionNumbers.length) or.push({ admissionId: { $in: admissionNumbers } });
+  if (emails.length) or.push({ "contact.email": { $in: emails } });
+  return or.length ? { $or: or } : null;
+}
+
+async function loadLinkedStudents(rows) {
+  const query = studentMatchQuery(rows);
+  if (!query) return [];
+  return Student.find(query)
+    .select("studentId admissionId admissionMongoId nameEnglish nameHindi fatherName motherName dateOfBirth gender category contact address guardian photo documents education admissionDetails status")
+    .lean()
+    .maxTimeMS(10000);
+}
+
+function studentKeySet(row) {
+  return [row._id, row.studentMongoId, row.admissionMongoId, row.admissionId, row.studentId, row.email, row.contact?.email]
+    .filter(Boolean)
+    .map((value) => String(value).toLowerCase());
+}
+
+function findLinkedStudent(doc, students = []) {
+  const keys = new Set(studentKeySet(doc));
+  return students.find((student) => studentKeySet(student).some((key) => keys.has(key))) || null;
+}
+
+function toRow(doc, linkedStudent = null) {
   const d = doc?.toObject ? doc.toObject() : doc;
   const details =
     d.details && typeof d.details === "object" && !Array.isArray(d.details)
@@ -635,11 +677,14 @@ function toRow(doc) {
   const universityId = d.universityId
     ? String(d.universityId)
     : details.universityId || "";
+  const student = linkedStudent || {};
+  const studentDetails = student.admissionDetails && typeof student.admissionDetails === "object" ? student.admissionDetails : {};
+  const photo = compactPhoto(student.photo || details.photoPreview || details.photo);
   return {
     id: d.admissionId,
     _id: String(d._id),
     admissionId: d.admissionId,
-    applicant: d.applicant,
+    applicant: d.applicant || student.nameEnglish || details.nameEnglish || "",
     email: d.email,
     phone: d.phone,
     program: d.course,
@@ -657,12 +702,30 @@ function toRow(doc) {
     state: d.state,
     college: d.college,
     studentStatus: d.studentStatus,
-    studentId: d.studentId || details.studentId || "",
+    studentId: d.studentId || details.studentId || student.studentId || "",
     studentMongoId: d.studentMongoId
       ? String(d.studentMongoId)
       : details.studentMongoId
         ? String(details.studentMongoId)
-        : "",
+        : student._id
+          ? String(student._id)
+          : "",
+      nameEnglish: student.nameEnglish || details.nameEnglish || d.applicant || "",
+      nameHindi: student.nameHindi || details.nameHindi || "",
+      fatherName: student.fatherName || details.fatherName || "",
+      motherName: student.motherName || details.motherName || "",
+      dateOfBirth: student.dateOfBirth || details.dateOfBirth || "",
+      gender: student.gender || details.gender || "",
+      category: student.category || details.category || "",
+      photo,
+      hasPhoto: Boolean(photo || student.photo || details.photoPreview || details.photo),
+      mobile: student.contact?.mobile || d.phone || details.studentMobile || details.contactNo || "",
+      address: student.address || {},
+      guardian: student.guardian || {},
+      education: Array.isArray(student.education) ? student.education : details.education || [],
+      documentCount: Array.isArray(student.documents) ? student.documents.length : 0,
+      studentStatus: student.status || d.studentStatus || "",
+      studentDetails,
     notes: d.notes,
     details,
     date: d.admissionDate
@@ -678,8 +741,8 @@ function toRow(doc) {
   };
 }
 
-function toListRow(doc) {
-  const row = toRow(doc);
+function toListRow(doc, linkedStudent = null) {
+  const row = toRow(doc, linkedStudent);
   return {
     ...row,
     details: slimDetails(row.details),
@@ -1055,6 +1118,44 @@ router.post("/online", requireStudentJwt, async (req, res) => {
 
 router.use(requireMasterAdminJwt);
 
+router.post(
+  "/import-update",
+  (req, res, next) => {
+    admissionsImportUpload.single("file")(req, res, (err) => {
+      if (err) {
+        return res.status(400).json({
+          success: false,
+          message: err.message || "XLSX upload failed",
+        });
+      }
+      next();
+    });
+  },
+  async (req, res) => {
+    try {
+      if (!req.file?.buffer?.length) {
+        return res.status(400).json({
+          success: false,
+          message: "No XLSX file received",
+        });
+      }
+      const dryRun = String(req.body?.dryRun ?? "true").toLowerCase() !== "false";
+      const report = await executeAdmissionEnrichment(
+        req.file.buffer,
+        req.file.originalname || "student-enrichment.xlsx",
+        dryRun
+      );
+      return res.json(report);
+    } catch (err) {
+      console.error("admission enrichment import error:", err);
+      return res.status(400).json({
+        success: false,
+        message: err.message || "Failed to process admission enrichment XLSX",
+      });
+    }
+  }
+);
+
 router.get("/meta", (_req, res) => {
   return res.json({
     success: true,
@@ -1072,7 +1173,8 @@ router.get("/", async (_req, res) => {
       .lean()
       .maxTimeMS(12000);
 
-    const listRows = rows.map(toListRow);
+    const students = await loadLinkedStudents(rows);
+    const listRows = rows.map((row) => toListRow(row, findLinkedStudent(row, students)));
     let pending = 0;
     let approved = 0;
     let verification = 0;
@@ -1122,7 +1224,8 @@ router.get("/:id", async (req, res) => {
     if (!entry) {
       return res.status(404).json({ success: false, message: "Admission not found" });
     }
-    return res.json({ success: true, entry: toRow(entry) });
+    const students = await loadLinkedStudents([entry]);
+    return res.json({ success: true, entry: toRow(entry, findLinkedStudent(entry, students)) });
   } catch (err) {
     console.error("admission get error:", err);
     return res.status(500).json({ success: false, message: "Failed to fetch admission" });
