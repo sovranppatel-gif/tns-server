@@ -159,8 +159,6 @@ function batchLabelFrom(batch, student) {
 function slimPhoto(photo) {
   const value = String(photo || "");
   if (!value) return "";
-  if (value.startsWith("data:")) return "";
-  if (value.length > 2000) return "";
   return value;
 }
 
@@ -235,6 +233,19 @@ function toListRow(doc) {
     createdAt: d.createdAt,
     updatedAt: d.updatedAt,
   };
+}
+
+function admissionKeySet(row) {
+  return [row._id, row.admissionMongoId, row.admissionId]
+    .filter(Boolean)
+    .map((value) => String(value).toLowerCase());
+}
+
+function findAdmissionForStudent(student, admissions) {
+  const keys = new Set(admissionKeySet(student));
+  return admissions.find((admission) =>
+    admissionKeySet(admission).some((key) => keys.has(key)),
+  );
 }
 
 function toDetailRow(doc, extras = {}) {
@@ -849,7 +860,34 @@ export async function listStudents(params = {}) {
     buildStats(),
   ]);
 
-  return { rows: docs.map(toListRow), stats };
+  const admissionIds = docs
+    .map((doc) => asObjectId(doc.admissionMongoId))
+    .filter(Boolean);
+  const admissionNumbers = docs.map((doc) => doc.admissionId).filter(Boolean);
+  const admissions = admissionIds.length || admissionNumbers.length
+    ? await Admission.find({
+        $or: [
+          ...(admissionIds.length ? [{ _id: { $in: admissionIds } }] : []),
+          ...(admissionNumbers.length ? [{ admissionId: { $in: admissionNumbers } }] : []),
+        ],
+      })
+        .select("admissionId details applicant")
+        .lean()
+        .maxTimeMS(10000)
+    : [];
+
+  const rows = docs.map((doc) => {
+    const admission = findAdmissionForStudent(doc, admissions);
+    const details = admission?.details && typeof admission.details === "object"
+      ? admission.details
+      : {};
+    if (!doc.photo && (details.photoPreview || details.photo)) {
+      return { ...doc, photo: details.photoPreview || details.photo };
+    }
+    return doc;
+  });
+
+  return { rows: rows.map(toListRow), stats };
 }
 
 export async function getStudentStats() {
@@ -949,6 +987,36 @@ export async function getStudentById(id, { includeSummaries = true } = {}) {
   await reconcileApprovedPortalProfile(doc);
 
   const lean = doc.toObject();
+  const admission = lean.admissionMongoId
+    ? await Admission.findById(lean.admissionMongoId).lean().maxTimeMS(8000)
+    : lean.admissionId
+      ? await Admission.findOne({ admissionId: lean.admissionId }).lean().maxTimeMS(8000)
+      : null;
+  const admissionDetails =
+    admission?.details && typeof admission.details === "object" && !Array.isArray(admission.details)
+      ? admission.details
+      : {};
+  lean.nameEnglish ||= admissionDetails.nameEnglish || admission?.applicant || "";
+  lean.nameHindi ||= admissionDetails.nameHindi || "";
+  lean.fatherName ||= admissionDetails.fatherName || "";
+  lean.motherName ||= admissionDetails.motherName || "";
+  lean.dateOfBirth ||= admissionDetails.dateOfBirth || "";
+  lean.gender ||= admissionDetails.gender || "";
+  lean.category ||= admissionDetails.category || "";
+  lean.photo ||= admissionDetails.photoPreview || admissionDetails.photo || "";
+  lean.contact = {
+    ...(lean.contact || {}),
+    mobile: lean.contact?.mobile || admissionDetails.studentMobile || admission?.phone || "",
+    email: lean.contact?.email || admissionDetails.email || admission?.email || "",
+  };
+  lean.address = {
+    ...(lean.address || {}),
+    permanent: lean.address?.permanent || admissionDetails.permanentAddress || "",
+    correspondence: lean.address?.correspondence || admissionDetails.homeAddress || "",
+    district: lean.address?.district || admissionDetails.district || admission?.city || "",
+    state: lean.address?.state || admissionDetails.state || admission?.state || "",
+    pinCode: lean.address?.pinCode || admissionDetails.pinCode || "",
+  };
   const course = lean.courseId && typeof lean.courseId === "object" ? lean.courseId : null;
   const university =
     lean.universityId && typeof lean.universityId === "object" ? lean.universityId : null;

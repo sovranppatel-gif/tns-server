@@ -595,7 +595,7 @@ function validatePayload(payload) {
   return null;
 }
 
-/** Strip base64 photos/docs from list payloads — keeps list API fast. */
+/** Strip large document fields from list payloads while preserving list photos. */
 function slimDetails(details) {
   if (!details || typeof details !== "object" || Array.isArray(details)) {
     return {};
@@ -630,7 +630,7 @@ function slimDetails(details) {
 function compactPhoto(photo) {
   const value = String(photo || "").trim();
   if (!value) return "";
-  return value.startsWith("data:") ? "" : value;
+  return value;
 }
 
 function studentMatchQuery(rows) {
@@ -1168,7 +1168,6 @@ router.get("/meta", (_req, res) => {
 router.get("/", async (_req, res) => {
   try {
     const rows = await Admission.find()
-      .select("-details.photoPreview")
       .sort({ admissionDate: -1, createdAt: -1 })
       .lean()
       .maxTimeMS(12000);
