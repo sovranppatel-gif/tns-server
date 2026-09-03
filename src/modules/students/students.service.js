@@ -13,6 +13,7 @@ import {
 import { createActivityLog } from "../activityLog/activityLog.service.js";
 import { emitSectionUpdate } from "../../lib/socket.js";
 import { normalizeStudentPayload } from "./students.validation.js";
+import { bestPhoto } from "../../lib/photo.js";
 
 const GST_INSTITUTE_ID = "institute-gst";
 const LIST_SELECT =
@@ -325,7 +326,6 @@ function compact(obj = {}) {
 function slimStoredPhoto(photo) {
   const value = String(photo || "");
   if (!value || value === "undefined") return "";
-  if (value.startsWith("data:") && value.length > 250000) return "";
   return value;
 }
 
@@ -881,8 +881,9 @@ export async function listStudents(params = {}) {
     const details = admission?.details && typeof admission.details === "object"
       ? admission.details
       : {};
-    if (!doc.photo && (details.photoPreview || details.photo)) {
-      return { ...doc, photo: details.photoPreview || details.photo };
+    const photo = bestPhoto(doc.photo, details.photoPreview, details.photo);
+    if (photo !== doc.photo) {
+      return { ...doc, photo };
     }
     return doc;
   });

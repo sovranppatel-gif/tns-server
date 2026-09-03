@@ -20,6 +20,7 @@ import { Course } from "../modules/courses/courses.model.js";
 import { Student } from "../modules/students/students.model.js";
 import { admissionsImportUpload } from "../modules/admissions/admissions-import.upload.js";
 import { executeAdmissionEnrichment } from "../modules/admissions/admissionEnrichment.service.js";
+import { bestPhoto } from "../lib/photo.js";
 
 const router = Router();
 
@@ -679,7 +680,7 @@ function toRow(doc, linkedStudent = null) {
     : details.universityId || "";
   const student = linkedStudent || {};
   const studentDetails = student.admissionDetails && typeof student.admissionDetails === "object" ? student.admissionDetails : {};
-  const photo = compactPhoto(student.photo || details.photoPreview || details.photo);
+  const photo = compactPhoto(bestPhoto(student.photo, details.photoPreview, details.photo));
   return {
     id: d.admissionId,
     _id: String(d._id),

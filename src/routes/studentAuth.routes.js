@@ -28,6 +28,7 @@ import {
   toPublicStudent,
 } from "../lib/studentPublicProfile.js";
 import { studentAvatarUpload } from "../modules/students/profilePhoto.upload.js";
+import { bufferToDataUrl } from "../lib/photo.js";
 import {
   assertPersonalUnique,
   findStudentUserFromJwt,
@@ -619,15 +620,15 @@ router.post("/avatar", requireStudentJwt, (req, res, next) => {
         .status(401)
         .json({ success: false, message: "Account not found" });
     }
-    if (!req.file?.filename) {
+    if (!req.file?.buffer) {
       return res.status(400).json({ success: false, message: "No photo received" });
     }
     return res.status(201).json({
       success: true,
       message: "Photo uploaded",
       data: {
-        url: `/uploads/students/avatars/${req.file.filename}`,
-        name: req.file.originalname || req.file.filename,
+        url: bufferToDataUrl(req.file.buffer, req.file.mimetype),
+        name: req.file.originalname || "photo",
         size: req.file.size,
         mimeType: req.file.mimetype,
       },

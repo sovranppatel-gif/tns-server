@@ -1,13 +1,10 @@
-import fs from "fs";
 import path from "path";
-import crypto from "crypto";
 import XLSX from "xlsx";
 import { Admission } from "../../models/Admission.js";
-import { ensureDir, getUploadRoot } from "../../lib/uploadRoot.js";
+import { bufferToDataUrl } from "../../lib/photo.js";
 
 const REQUIRED_HEADERS = ["Student Code", "User id", "Full Name"];
 const EMPTY_VALUES = new Set(["", "-", "n/a", "na", "null", "undefined", "nan"]);
-const PHOTO_ROOT = getUploadRoot("students", "avatars");
 const PHOTO_EXTENSIONS = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif"]);
 
 function text(value) {
@@ -140,15 +137,20 @@ function readPhotoAnchors(workbook) {
   return { totalEmbeddedImages: Object.keys(workbook.files || {}).filter((name) => name.startsWith("xl/media/")).length, items: [...unique.values()] };
 }
 
-function photoFileUrl(workbook, photo) {
+function photoDataUrl(workbook, photo) {
   const entry = workbook.files?.[photo.mediaPath];
   if (!entry?.content) return null;
   const extension = path.extname(photo.imageFile).toLowerCase();
-  const safeExtension = PHOTO_EXTENSIONS.has(extension) ? extension : ".jpg";
-  ensureDir(PHOTO_ROOT);
-  const filename = `${Date.now()}-${crypto.randomBytes(8).toString("hex")}${safeExtension}`;
-  fs.writeFileSync(path.join(PHOTO_ROOT, filename), entry.content);
-  return `/uploads/students/avatars/${filename}`;
+  const mimeType = PHOTO_EXTENSIONS.has(extension)
+    ? extension === ".png"
+      ? "image/png"
+      : extension === ".webp"
+        ? "image/webp"
+        : extension === ".gif"
+          ? "image/gif"
+          : "image/jpeg"
+    : "image/jpeg";
+  return bufferToDataUrl(Buffer.isBuffer(entry.content) ? entry.content : Buffer.from(entry.content), mimeType);
 }
 
 function cell(row, indexes, header) {
@@ -435,7 +437,7 @@ export async function executeAdmissionEnrichment(buffer, fileName, dryRun = true
     const photoOperations = [];
     for (const { photo, admissionMongoId } of planned.photos) {
       try {
-        const url = photoFileUrl(planned.workbook, photo);
+        const url = photoDataUrl(planned.workbook, photo);
         if (!url) throw new Error("Embedded media bytes unavailable");
         photoOperations.push({ updateOne: { filter: { _id: admissionMongoId }, update: { $set: { "details.photoPreview": url, "details.importMeta.photoImportSource": fileName, "details.importMeta.photoImportedAt": new Date() } } } });
         planned.report.photoReport.successfullyImportedImages += 1;

@@ -15,6 +15,7 @@
     "seed": "node src/scripts/runSeeds.js",
     "seed:question-bank": "node src/db/seedQuestionBankOmcComputerBasic.js",
     "seed:admission-student-fields": "node src/scripts/backfillAdmissionStudentFields.js",
+    "migrate:photo-paths": "node src/scripts/migratePhotoPathsToBase64.js",
     "import:admissions": "node src/scripts/importExcelAdmissions.js",
     "test:admission-enrichment": "node --test src/modules/admissions/admissionEnrichment.service.test.js"
   },

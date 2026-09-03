@@ -2,6 +2,7 @@ import { Router } from "express";
 import { requireMasterAdminJwt } from "../../middleware/requireMasterAdminJwt.js";
 import { educationDocumentUpload } from "../admissions/admissions.upload.js";
 import { studentAvatarUpload } from "./profilePhoto.upload.js";
+import { bufferToDataUrl } from "../../lib/photo.js";
 import {
   getStudentsController,
   getStudentController,
@@ -50,15 +51,15 @@ router.post("/upload-photo", (req, res, next) => {
     next();
   });
 }, (req, res) => {
-  if (!req.file?.filename) {
+  if (!req.file?.buffer) {
     return res.status(400).json({ success: false, message: "No photo file received" });
   }
   return res.status(201).json({
     success: true,
     message: "Photo uploaded",
     data: {
-      url: `/uploads/students/avatars/${req.file.filename}`,
-      name: req.file.originalname || req.file.filename,
+      url: bufferToDataUrl(req.file.buffer, req.file.mimetype),
+      name: req.file.originalname || "photo",
       size: req.file.size,
       mimeType: req.file.mimetype,
     },
