@@ -73,8 +73,10 @@ export async function connectMongo() {
   const srvUri = env.mongoUri;
   const options = {
     autoIndex: true,
-    // Fail faster than default 30s when Atlas DNS/shard hosts flap (common on ISP DNS)
     serverSelectionTimeoutMS: Number(process.env.MONGO_SERVER_SELECTION_TIMEOUT_MS) || 8000,
+    connectTimeoutMS: Number(process.env.MONGO_CONNECT_TIMEOUT_MS) || 8000,
+    socketTimeoutMS: Number(process.env.MONGO_SOCKET_TIMEOUT_MS) || 10000,
+    waitQueueTimeoutMS: Number(process.env.MONGO_WAIT_QUEUE_TIMEOUT_MS) || 8000,
   };
 
   if (!srvUri.startsWith("mongodb+srv://")) {

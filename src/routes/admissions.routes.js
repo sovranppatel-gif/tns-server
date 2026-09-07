@@ -651,7 +651,7 @@ async function loadLinkedStudents(rows) {
   const query = studentMatchQuery(rows);
   if (!query) return [];
   return Student.find(query)
-    .select("studentId admissionId admissionMongoId nameEnglish nameHindi fatherName motherName dateOfBirth gender category contact address guardian photo documents education admissionDetails status")
+    .select("studentId admissionId admissionMongoId nameEnglish nameHindi fatherName motherName dateOfBirth gender category contact status")
     .lean()
     .maxTimeMS(10000);
 }
@@ -744,10 +744,66 @@ function toRow(doc, linkedStudent = null) {
 
 function toListRow(doc, linkedStudent = null) {
   const row = toRow(doc, linkedStudent);
+  const {
+    address: _address,
+    guardian: _guardian,
+    education: _education,
+    studentDetails: _studentDetails,
+    photo: _photo,
+    ...compactRow
+  } = row;
   return {
-    ...row,
+    ...compactRow,
+    photo: "",
     details: slimDetails(row.details),
   };
+}
+
+const ADMISSION_LIST_SELECT = [
+  "_id admissionId applicant email phone course courseId universityId termType termNumber session mode counsellor fee status city state college studentStatus studentId studentMongoId notes admissionDate createdAt updatedAt",
+  "details.courseId details.universityId details.termType details.termNumber details.session details.studentId details.studentMongoId details.nameEnglish details.nameHindi details.fatherName details.motherName details.dateOfBirth details.gender details.category details.studentMobile details.contactNo details.source details.universityName details.registrationNo details.batchId",
+].join(" ");
+
+function escapeRegex(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function admissionListQuery(query = {}) {
+  const filter = {};
+  for (const key of ["status", "courseId", "universityId", "session", "gender", "category"]) {
+    const value = String(query[key] || "").trim();
+    if (!value) continue;
+    if (key === "courseId" || key === "universityId") {
+      if (mongoose.isValidObjectId(value)) filter[key] = value;
+    } else if (key === "gender" || key === "category") {
+      filter[`details.${key}`] = value;
+    } else {
+      filter[key] = value;
+    }
+  }
+
+  const batchId = String(query.batchId || "").trim();
+  if (batchId) filter["details.batchId"] = batchId;
+
+  const search = String(query.search || "").trim();
+  if (search) {
+    const exact = search.toLowerCase();
+    const exactOr = [
+      { admissionId: search },
+      { email: exact },
+      { phone: search },
+      { studentId: search },
+      { "details.registrationNo": search },
+    ];
+    const escaped = escapeRegex(search);
+    filter.$or = [
+      ...exactOr,
+      { applicant: { $regex: escaped, $options: "i" } },
+      { course: { $regex: escaped, $options: "i" } },
+      { counsellor: { $regex: escaped, $options: "i" } },
+    ];
+  }
+  return filter;
 }
 
 /**
@@ -1166,47 +1222,61 @@ router.get("/meta", (_req, res) => {
   });
 });
 
-router.get("/", async (_req, res) => {
+router.get("/", async (req, res) => {
+  const startedAt = Date.now();
+  const page = Math.max(1, Number.parseInt(req.query.page, 10) || 1);
+  const limit = Math.min(50, Math.max(1, Number.parseInt(req.query.limit, 10) || 25));
+  const filter = admissionListQuery(req.query);
   try {
-    const rows = await Admission.find()
-      .sort({ admissionDate: -1, createdAt: -1 })
+    const queryStartedAt = Date.now();
+    const rowsPromise = Admission.find(filter)
+      .select(ADMISSION_LIST_SELECT)
+      .sort({ admissionDate: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit)
       .lean()
       .maxTimeMS(12000);
 
+    const countPromise = Admission.countDocuments(filter).maxTimeMS(12000);
+    const statsPromise = Promise.all(
+      ADMISSION_STATUSES.map((status) =>
+        Admission.countDocuments({ ...filter, status }).maxTimeMS(12000)
+      )
+    );
+    const onlinePendingPromise = Admission.countDocuments({
+      ...filter,
+      mode: "Online",
+      status: { $in: ["Pending", "Verification"] },
+    }).maxTimeMS(12000);
+    const onlinePromise = Admission.countDocuments({ ...filter, mode: "Online" }).maxTimeMS(12000);
+    const [rows, total, statusCounts, onlinePending, online] = await Promise.all([
+      rowsPromise,
+      countPromise,
+      statsPromise,
+      onlinePendingPromise,
+      onlinePromise,
+    ]);
+    const queryMs = Date.now() - queryStartedAt;
     const students = await loadLinkedStudents(rows);
     const listRows = rows.map((row) => toListRow(row, findLinkedStudent(row, students)));
-    let pending = 0;
-    let approved = 0;
-    let verification = 0;
-    let rejected = 0;
-    let cancelled = 0;
-    let online = 0;
-    let onlinePending = 0;
-    for (const r of rows) {
-      if (r.status === "Pending") pending += 1;
-      else if (r.status === "Approved") approved += 1;
-      else if (r.status === "Verification") verification += 1;
-      else if (r.status === "Rejected") rejected += 1;
-      else if (r.status === "Cancelled") cancelled += 1;
-      if (r.mode === "Online") {
-        online += 1;
-        if (r.status === "Pending" || r.status === "Verification") onlinePending += 1;
-      }
-    }
+    const counts = Object.fromEntries(ADMISSION_STATUSES.map((status, index) => [
+      status.toLowerCase(), statusCounts[index],
+    ]));
 
+    console.info(`[admissions] page=${page} limit=${limit} rows=${rows.length} query=${queryMs}ms total=${Date.now() - startedAt}ms`);
     return res.json({
       success: true,
       rows: listRows,
       stats: {
-        total: rows.length,
-        pending,
-        approved,
-        verification,
-        rejected,
-        cancelled,
+        total,
+        ...counts,
         online,
         onlinePending,
       },
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
     });
   } catch (err) {
     console.error("admissions list error:", err);

@@ -17,7 +17,7 @@ import { bestPhoto } from "../../lib/photo.js";
 
 const GST_INSTITUTE_ID = "institute-gst";
 const LIST_SELECT =
-  "studentId admissionId admissionMongoId universityId courseId batchId session currentTerm universityName universityShortName courseName courseCode courseCategory batchName nameEnglish nameHindi fatherName gender category contact photo status admissionDate createdAt updatedAt";
+  "studentId admissionId admissionMongoId universityId courseId batchId session currentTerm universityName universityShortName courseName courseCode courseCategory batchName nameEnglish nameHindi fatherName gender category contact status admissionDate createdAt updatedAt";
 
 function httpError(message, status = 400) {
   const err = new Error(message);
@@ -851,44 +851,13 @@ export async function listStudents(params = {}) {
   const [docs, stats] = await Promise.all([
     Student.find(query)
       .select(LIST_SELECT)
-      .populate("universityId", "name shortName status")
-      .populate("courseId", "name code category status")
-      .populate("batchId", "name batchId status currentSemester")
       .sort({ createdAt: -1 })
       .lean()
-      .maxTimeMS(15000),
+      .maxTimeMS(10000),
     buildStats(),
   ]);
 
-  const admissionIds = docs
-    .map((doc) => asObjectId(doc.admissionMongoId))
-    .filter(Boolean);
-  const admissionNumbers = docs.map((doc) => doc.admissionId).filter(Boolean);
-  const admissions = admissionIds.length || admissionNumbers.length
-    ? await Admission.find({
-        $or: [
-          ...(admissionIds.length ? [{ _id: { $in: admissionIds } }] : []),
-          ...(admissionNumbers.length ? [{ admissionId: { $in: admissionNumbers } }] : []),
-        ],
-      })
-        .select("admissionId details applicant")
-        .lean()
-        .maxTimeMS(10000)
-    : [];
-
-  const rows = docs.map((doc) => {
-    const admission = findAdmissionForStudent(doc, admissions);
-    const details = admission?.details && typeof admission.details === "object"
-      ? admission.details
-      : {};
-    const photo = bestPhoto(doc.photo, details.photoPreview, details.photo);
-    if (photo !== doc.photo) {
-      return { ...doc, photo };
-    }
-    return doc;
-  });
-
-  return { rows: rows.map(toListRow), stats };
+  return { rows: docs.map(toListRow), stats };
 }
 
 export async function getStudentStats() {

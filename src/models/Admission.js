@@ -72,5 +72,7 @@ admissionSchema.index({ status: 1, admissionDate: -1 });
 admissionSchema.index({ email: 1 });
 admissionSchema.index({ course: 1 });
 admissionSchema.index({ courseId: 1, universityId: 1 });
+admissionSchema.index({ session: 1, admissionDate: -1 });
+admissionSchema.index({ "details.batchId": 1, admissionDate: -1 });
 
 export const Admission = mongoose.model("Admission", admissionSchema);

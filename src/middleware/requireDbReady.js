@@ -1,6 +1,21 @@
 import mongoose from "mongoose";
 import { waitForMongo } from "../db/connectMongo.js";
 
+async function isMongoResponsive(timeoutMs = 1500) {
+  if (mongoose.connection.readyState !== 1 || !mongoose.connection.db) return false;
+  try {
+    await Promise.race([
+      mongoose.connection.db.command({ ping: 1 }, { maxTimeMS: timeoutMs }),
+      new Promise((_, reject) => {
+        setTimeout(() => reject(new Error("Mongo ping timeout")), timeoutMs);
+      }),
+    ]);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Fail fast when Mongo is down/reconnecting so login doesn't hang
  * on Atlas DNS flaps (ENOTFOUND / ReplicaSetNoPrimary).
@@ -10,7 +25,8 @@ import { waitForMongo } from "../db/connectMongo.js";
 export async function requireDbReady(req, res, next) {
   // 0 = disconnected, 1 = connected, 2 = connecting, 3 = disconnecting
   if (mongoose.connection.readyState === 1) {
-    return next();
+    if (await isMongoResponsive()) return next();
+    return mongoUnavailableResponse(res, new Error("Mongo ping failed"));
   }
 
   try {
